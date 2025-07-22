@@ -44,7 +44,7 @@ class DishController extends Controller
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'main_image' => ['required', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Main Image (Required)
             'extra_images.*' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Multiple Images
-            'spice_level' => ['required'],
+
         ]);
 
         // 🔹 Create Dish
@@ -52,7 +52,7 @@ class DishController extends Controller
         $dish->name = $request->name;
         $dish->description = $request->description;
         $dish->category_id = $request->category_id;
-        $dish->spice_level = $request->spice_level;
+        $dish->spice_level = "mild";
 
         // 🔹 Handle Main Image Upload
         if ($request->hasFile('main_image')) {
@@ -122,7 +122,6 @@ class DishController extends Controller
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'main_image' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Main image
             'extra_images.*' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Multiple images
-            'spice_level' => ['required', 'string'],
             'availability_status' => ['required', 'string'],
             'ingredients' => ['required', 'string'],
             'dish_tags' => ['required', 'string'],
@@ -177,7 +176,7 @@ class DishController extends Controller
         $dish->name = $request->name;
         $dish->description = $request->description;
         $dish->category_id = $request->category_id;
-        $dish->spice_level = $request->spice_level;
+        $dish->spice_level = "mild";
         $dish->availability_status = $request->availability_status;
         $dish->dish_tags = $dishtags;
         $dish->ingredients = $ingredients;

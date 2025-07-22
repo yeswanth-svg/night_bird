@@ -56,7 +56,7 @@
                                         <th>Name</th>
                                         <th>Image</th>
                                         <th>Stock Availability</th>
-                                        <th>Spice Level</th>
+
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -79,25 +79,7 @@
                                             @endif
                                         </td>
 
-                                        <td>
-                                            @if ($dish->spice_level == 'mild')
-                                                <span class="badge bg-primary p-2">
-                                                    🌱 Mild
-                                                </span>
-                                            @elseif ($dish->spice_level == 'medium')
-                                                <span class="badge bg-warning text-dark p-2">
-                                                    🌶️ Medium
-                                                </span>
-                                            @elseif ($dish->spice_level == 'spicy')
-                                                <span class="badge bg-danger p-2">
-                                                    🔥 Spicy
-                                                </span>
-                                            @elseif ($dish->spice_level == 'extra_spicy')
-                                                <span class="badge bg-dark text-light p-2">
-                                                    ☠️ Extra Spicy
-                                                </span>
-                                            @endif
-                                        </td>
+
 
                                         <td>
                                             <div class="form-button-action">

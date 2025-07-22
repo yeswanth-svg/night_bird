@@ -136,7 +136,7 @@
                         <li class="nav-item {{ request()->is('admin/category*') ? 'active' : '' }}">
                             <a href="{{route('admin.category.index')}}">
                                 <i class="fas fa-layer-group"></i>
-                                <p>Categories</p>
+                                <p>Main Categories</p>
                                 <!-- <span class="caret"></span> -->
                             </a>
                         </li>
@@ -144,7 +144,7 @@
                         <li class="nav-item {{request()->is('admin/dishes*') ? 'active' : ''}}">
                             <a href="{{route('admin.dishes.index')}}">
                                 <i class="fas fa-mortar-pestle"></i>
-                                <p>Dishes</p>
+                                <p>Sub Categories</p>
                                 <!-- <span class="caret"></span> -->
                             </a>
 
@@ -153,7 +153,7 @@
                         <li class="nav-item {{request()->is('admin/quantity*') ? 'active' : ''}}">
                             <a href="{{route('admin.quantity.index')}}">
                                 <i class="fas fa-mortar-pestle"></i>
-                                <p>Dish Quantites</p>
+                                <p>Dress sizes</p>
                                 <!-- <span class="caret"></span> -->
                             </a>
 
@@ -206,16 +206,16 @@
                         </li>
 
                         <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#payment"
+                            <!-- <a data-bs-toggle="collapse" href="#payment"
                                 aria-expanded="{{ request()->is('admin/orders/payment*') ? 'true' : 'false' }}"
                                 aria-controls="payment">
                                 <i class="fas fa-credit-card"></i>
                                 <p>Order Payments</p>
                                 <span class="caret"></span>
-                            </a>
+                            </a> -->
 
                             <!-- Show only for payment routes -->
-                            <div class="collapse {{ request()->is('admin/orders/payment*') ? 'show' : '' }}"
+                            <!-- <div class="collapse {{ request()->is('admin/orders/payment*') ? 'show' : '' }}"
                                 id="payment">
                                 <ul class="nav nav-collapse">
                                     <li class="{{ request()->is('admin/orders/payment/pending') ? 'active' : '' }}">
@@ -235,16 +235,16 @@
                                                 class="sub-item">Completed Payments</span></a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </li>
 
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="{{route('admin.razorpay_transactions')}}">
                                 <i class="fas fa-coins"></i>
                                 <p>Transactions</p>
                             </a>
 
-                        </li>
+                        </li> -->
 
 
 
@@ -258,28 +258,28 @@
 
                         </li>
 
-                        <li class="nav-item {{request()->is('admin/coupons*') ? 'active' : ''}}">
+                        <!-- <li class="nav-item {{request()->is('admin/coupons*') ? 'active' : ''}}">
                             <a href="{{route('admin.coupons.index')}}">
                                 <i class="fas fa-coins"></i>
                                 <p>Cupons</p>
                             </a>
 
-                        </li>
-                        <li class="nav-item {{request()->is('admin/rewards*') ? 'active' : ''}}">
+                        </li> -->
+                        <!-- <li class="nav-item {{request()->is('admin/rewards*') ? 'active' : ''}}">
                             <a href="{{route('admin.rewards.index')}}">
                                 <i class="fas fa-gift"></i>
                                 <p>Rewards</p>
                             </a>
 
-                        </li>
+                        </li> -->
 
-                        <li class="nav-item {{request()->is('admin/shipping_zones*') ? 'active' : ''}}">
+                        <!-- <li class="nav-item {{request()->is('admin/shipping_zones*') ? 'active' : ''}}">
                             <a href="{{route('admin.shipping_zones.index')}}">
                                 <i class="fas fa-globe-americas"></i>
                                 <p>Shipping Zones</p>
                             </a>
 
-                        </li>
+                        </li> -->
 
                         <li class="nav-item {{request()->is('admin/settings*') ? 'active' : ''}}">
                             <a href="{{route('admin.settings.index')}}">
