@@ -48,9 +48,9 @@
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="weight" class="form-label text-success fw-bold fs-4">Weight</label>
+                                        <label for="weight" class="form-label text-success fw-bold fs-4">Size</label>
                                         <input type="text" name="weight" id="weight" class="form-control"
-                                            placeholder="e.g.,250 g or 1 kg" required value="{{old('weight')}}" step="0.1">
+                                            placeholder="e.g., M or XL" required value="{{old('weight')}}">
                                     </div>
 
                                     <!-- Dish Name -->

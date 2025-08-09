@@ -1,11 +1,11 @@
 @extends('layouts.admin')
-@section('title', 'Create Dish')
+@section('title', 'Create Dress')
 @section('content')
 
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Dish</h3>
+                <h3 class="fw-bold mb-3">Dress</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="#">
@@ -16,7 +16,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Dish</a>
+                        <a href="#">Dress</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -30,7 +30,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Create Dish</h4>
+                            <h4 class="card-title">Create Dress</h4>
                         </div>
                         <div class="card-body">
                             <form method="POST" action="{{ route('admin.dishes.store') }}" enctype="multipart/form-data"
@@ -38,12 +38,11 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="dishName"
-                                            class="form-label text-success fw-bold fs-4">Categories</label>
-                                        <select class="form-select form-control" name="category_id">
+                                        <label for="dishName" class="form-label text-success fw-bold fs-4">Type</label>
+                                        <select class="form-select form-control" name="type_id">
                                             <option value="">Select Category</option>
-                                            @foreach($categories as $type)
-                                                <option value="{{$type->id}}">{{$type->category_name}}</option>
+                                            @foreach($types as $type)
+                                                <option value="{{$type->id}}">{{$type->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -51,14 +50,15 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="name" class="form-label text-success fw-bold fs-4">Name</label>
                                         <input type="text" name="name" id="name" class="form-control"
-                                            placeholder="e.g., Chicken Pickel" required value="{{old('name')}}">
+                                            placeholder="e.g., Mens Jeans" required value="{{old('name')}}">
                                     </div>
 
                                     <!-- Dish Image -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="main_image" class="form-label text-success fw-bold fs-4">Main Image</label>
-                                        <input type="file" name="main_image" id="main_image" class="form-control" accept=".webp"
-                                            required value="{{old('image')}}">
+                                        <label for="main_image" class="form-label text-success fw-bold fs-4">Main
+                                            Image</label>
+                                        <input type="file" name="main_image" id="main_image" class="form-control"
+                                            accept=".webp" required value="{{old('image')}}">
                                         <span class="text-danger">* You can only upload .webpof size 150 * 150.Max 2MB
                                             Files</span>
                                     </div>

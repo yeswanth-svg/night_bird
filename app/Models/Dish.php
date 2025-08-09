@@ -15,15 +15,15 @@ class Dish extends Model
         'name',
         'image',
         'description',
-        'category_id',
+        'type_id',
         'price',
         'quantity',
         'availability_status',
     ];
 
-    public function category()
+    public function type()
     {
-        return $this->belongsTo(Category::class, 'category_id'); // 'dish_type_id' is the foreign key in dishes table
+        return $this->belongsTo(Type::class, 'type_id'); // 'dish_type_id' is the foreign key in dishes table
     }
 
     public function quantities()

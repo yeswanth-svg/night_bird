@@ -40,11 +40,11 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="dishName" class="form-label text-success fw-bold fs-4">Category</label>
-                                        <select class="form-select form-control" name="category_id">
-                                            <option value="{{$dish->category_id}}">{{$dish->category->category_name}}
+                                        <select class="form-select form-control" name="type_id">
+                                            <option value="{{$dish->type_id}}">{{$dish->type->name}}
                                             </option>
-                                            @foreach($categories as $type)
-                                                <option value="{{$type->id}}">{{$type->category_name}}</option>
+                                            @foreach($types as $type)
+                                                <option value="{{$type->id}}">{{$type->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -103,8 +103,6 @@
 
 
 
-
-
                                     <div class="col-md-6 mb-3">
                                         <label for="dishName"
                                             class="form-label text-success fw-bold fs-4">Description</label>
@@ -125,20 +123,6 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        <label for="spice_level" class="form-label text-success fw-bold fs-4">Spice
-                                            Level</label>
-                                        <select name="spice_level" id="spice_level" class="form-select" required>
-                                            <option value="mild" {{ $dish->spice_level == 'mild' ? 'selected' : '' }}>
-                                                Mild</option>
-                                            <option value="medium" {{ $dish->spice_level == 'medium' ? 'selected' : '' }}>
-                                                Medium</option>
-                                            <option value="spicy" {{ $dish->spice_level == 'spicy' ? 'selected' : '' }}>
-                                                Spicy</option>
-                                            <option value="extra_spicy" {{ $dish->spice_level == 'extra_spicy' ? 'selected' : '' }}>
-                                                Extra Spicy</option>
-                                        </select>
-                                    </div>
 
 
                                     <div class="col-md-6 mb-3">
@@ -148,13 +132,6 @@
                                             value="{{ !empty($dish->dish_tags) ? implode(', ', json_decode($dish->dish_tags, true)) : '' }}">
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ingredients"
-                                            class="form-label text-success fw-bold fs-4">Ingredients</label>
-                                        <input type="text" class="form-control" id="ingredients" name="ingredients"
-                                            placeholder="Eg:Oil, Chicken (comma-separated)"
-                                            value="{{ !empty($dish->ingredients) ? implode(', ', json_decode($dish->ingredients, true)) : '' }}">
-                                    </div>
 
 
                                     <div class="col-md-6 mb-3 visually-hidden">

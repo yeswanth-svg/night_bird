@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Dish;
 use App\Models\DishImage;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -17,7 +18,7 @@ class DishController extends Controller
     public function index()
     {
         //
-        $dishes = Dish::orderBy('category_id')->get();
+        $dishes = Dish::orderBy('type_id')->get();
         return view('admin.dishes.index', compact('dishes'));
     }
 
@@ -27,8 +28,8 @@ class DishController extends Controller
     public function create()
     {
         //
-        $categories = Category::all();
-        return view('admin.dishes.create', compact('categories'));
+        $types = Type::all();
+        return view('admin.dishes.create', compact('types'));
     }
 
     /**
@@ -41,7 +42,7 @@ class DishController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'type_id' => ['required', 'integer', 'exists:types,id'],
             'main_image' => ['required', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Main Image (Required)
             'extra_images.*' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Multiple Images
 
@@ -51,7 +52,7 @@ class DishController extends Controller
         $dish = new Dish();
         $dish->name = $request->name;
         $dish->description = $request->description;
-        $dish->category_id = $request->category_id;
+        $dish->type_id = $request->type_id;
         $dish->spice_level = "mild";
 
         // 🔹 Handle Main Image Upload
@@ -104,8 +105,8 @@ class DishController extends Controller
     {
         //
         $dish = Dish::find($id);
-        $categories = Category::all();
-        return view('admin.dishes.edit', compact('dish', 'categories'));
+        $types = Type::all();
+        return view('admin.dishes.edit', compact('dish', 'types'));
     }
 
     /**
@@ -119,11 +120,10 @@ class DishController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'type_id' => ['required', 'integer', 'exists:types,id'],
             'main_image' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Main image
             'extra_images.*' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Multiple images
             'availability_status' => ['required', 'string'],
-            'ingredients' => ['required', 'string'],
             'dish_tags' => ['required', 'string'],
             'rating' => ['nullable', 'numeric', 'between:0,5'],
         ]);
@@ -175,11 +175,9 @@ class DishController extends Controller
         // 🔹 Update Dish Details
         $dish->name = $request->name;
         $dish->description = $request->description;
-        $dish->category_id = $request->category_id;
-        $dish->spice_level = "mild";
+        $dish->type_id = $request->type_id;
         $dish->availability_status = $request->availability_status;
         $dish->dish_tags = $dishtags;
-        $dish->ingredients = $ingredients;
         $dish->rating = $request->rating;
         $dish->save();
 
