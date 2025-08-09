@@ -141,6 +141,14 @@
                             </a>
                         </li>
 
+                        <li class="nav-item {{ request()->is('admin/category*') ? 'active' : '' }}">
+                            <a href="{{route('admin.type.index')}}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Type Categories</p>
+                                <!-- <span class="caret"></span> -->
+                            </a>
+                        </li>
+
                         <li class="nav-item {{request()->is('admin/dishes*') ? 'active' : ''}}">
                             <a href="{{route('admin.dishes.index')}}">
                                 <i class="fas fa-mortar-pestle"></i>
@@ -709,29 +717,29 @@
             @endif
 
 
-            // Error notification
-            @if($errors->any())
-                var content = {
-                    message: "{{ $errors->first() }}",
-                    title: "Error",
-                    icon: "fa fa-exclamation-circle",
-                };
+                // Error notification
+                @if($errors->any())
+                    var content = {
+                        message: "{{ $errors->first() }}",
+                        title: "Error",
+                        icon: "fa fa-exclamation-circle",
+                    };
 
-                $.notify(content, {
-                    type: "danger", // Error style
-                    allow_dismiss: true,
-                    delay: 5000,
-                    placement: {
-                        from: "top",
-                        align: "right",
-                    },
-                    offset: { x: 20, y: 70 },
-                    animate: {
-                        enter: "animated fadeInDown",
-                        exit: "animated fadeOutUp",
-                    },
-                });
-            @endif
+                    $.notify(content, {
+                        type: "danger", // Error style
+                        allow_dismiss: true,
+                        delay: 5000,
+                        placement: {
+                            from: "top",
+                            align: "right",
+                        },
+                        offset: { x: 20, y: 70 },
+                        animate: {
+                            enter: "animated fadeInDown",
+                            exit: "animated fadeOutUp",
+                        },
+                    });
+                @endif
 
         });
     </script>

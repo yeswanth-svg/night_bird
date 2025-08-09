@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Dish;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,13 +14,14 @@ class HomeController extends Controller
     public function index()
     {
         // Fetch categories with only 5 dishes per category
-        $categories = Category::with([
+        $categories = Category::all();
+        $types = Type::with([
             'dishes' => function ($query) {
                 $query->limit(5); // Limit to 5 dishes per category
             }
         ])->get();
 
-        return view('welcome', compact('categories'));
+        return view('welcome', compact('types', 'categories'));
     }
 
 
@@ -36,7 +38,7 @@ class HomeController extends Controller
         $selectedCategory = $request->input('category', optional($categories->first())->id);
 
         // Filter dishes based on category
-        $query = Dish::query()->where('category_id', $selectedCategory);
+        $query = Dish::query()->where('type_id', $selectedCategory);
 
         // Paginate results (12 per page)
         $dishes = $query->paginate(12);

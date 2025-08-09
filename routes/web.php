@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\RewardController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShippingZonesController;
 use App\Http\Controllers\Admin\TicketCategoriesController;
+use App\Http\Controllers\Admin\TypeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -184,6 +185,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoriesController::class);
+    Route::resource('type', TypeController::class);
     Route::resource('dishes', DishController::class);
     Route::resource('quantity', DishQuantities::class);
 
