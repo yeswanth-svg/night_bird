@@ -9,8 +9,10 @@ class Category extends Model
     //
     protected $fillable = ['category_name'];
 
-    public function types()
-    {
-        return $this->hasMany(Type::class, 'category_id'); // 'dish_type_id' is the foreign key in dishes table
-    }
+   public function types()
+{
+    // Category has many types (e.g., Men's Fashion → T-Shirts, Jeans, etc.)
+    return $this->hasMany(Type::class, 'category_id', 'id');
+}
+
 }

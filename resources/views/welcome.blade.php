@@ -18,7 +18,79 @@
         .btn-play:hover {
             opacity: 1;
         }
+
+        .product-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .product-img-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Badges */
+        .product-img-wrapper .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 30px;
+            color: #fff;
+        }
+
+        .badge.hot {
+            background: #28a745;
+        }
+
+        .badge.new {
+            background: #007bff;
+        }
+
+        .badge.off {
+            background: #ff5722;
+        }
+
+        /* Product Info */
+        .product-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ff5722;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            font-size: 13px;
+            color: #999;
+            margin-left: 6px;
+        }
     </style>
+
 
     <!-- Hero Start -->
     <div class="container-fluid bg-light py-6 my-6 mt-0">
@@ -45,6 +117,84 @@
         </div>
     </div>
     <!-- Hero End -->
+
+    <!-- Our collection Start -->
+    <div class="container-fluid menu py-6" id="welcome_menu">
+        <div class="container">
+            <div class="text-center">
+                <small
+                    class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
+                    Our Collections
+                </small>
+                <h1 class="display-5 mb-5">Elevate Your Evenings with NightBird Fashion</h1>
+            </div>
+
+            <div class="tab-class text-center">
+                <!-- Category Tabs -->
+                <div class="category-tabs-wrapper">
+                    <ul class="nav nav-pills d-flex category-tabs mb-5">
+                        @foreach($categories as $key => $category)
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
+                                    data-bs-toggle="pill" href="#tab-{{ $category->id }}">
+                                    {{ $category->category_name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    @foreach($categories as $key => $category)
+                        <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
+
+                            <div class="row g-4">
+                                @forelse($category->types as $type)
+                                    <div class="col-lg-3 col-md-4 col-sm-6">
+                                        <a href="{{ route('menu', ['category' => $type->id]) }}"
+                                            class="text-decoration-none text-dark">
+                                            <div class="product-card text-center">
+
+                                                <div class="product-img-wrapper">
+                                                    @if($type->image)
+                                                        <img src="{{ asset('type_images/' . $type->image) }}" alt="{{ $type->name }}"
+                                                            class="img-fluid">
+                                                    @else
+                                                        <img src="{{ asset('images/no-image.png') }}" alt="No image" class="img-fluid">
+                                                    @endif
+
+                                                    
+                                                </div>
+
+                                                <div class="product-info mt-2">
+                                                    <h6 class="product-title">{{ $type->name }}</h6>
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @empty
+                                    <div class="col-12">
+                                        <p class="text-muted">No types available in this category.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+
+                            <!-- "View All" Button -->
+                            <div class="text-center mt-4">
+                                <a href="{{ route('menu', ['category' => $category->id]) }}"
+                                    class="btn btn-primary rounded-pill px-4 py-2">
+                                    View All {{ $category->category_name }}
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Our collection End -->
 
     <!-- About Start -->
     <div class="container-fluid py-6">
@@ -176,195 +326,97 @@
     <!-- Video Modal End -->
 
 
-    <!-- Our collection Start -->
-    <div class="container-fluid menu py-6" id="welcome_menu">
-        <div class="container">
-            <div class="text-center">
-                <small
-                    class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
-                    Our Collections
-                </small>
-                <h1 class="display-5 mb-5">Elevate Your Evenings with NightBird Fashion</h1>
-            </div>
-
-            <div class="tab-class text-center">
-                <!-- Category Tabs -->
-                <div class="category-tabs-wrapper">
-                    <ul class="nav nav-pills d-flex category-tabs mb-5">
-                        @foreach($categories as $key => $category)
-                            <li class="nav-item">
-                                <a class="nav-link px-3 py-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
-                                    data-bs-toggle="pill" href="#tab-{{ $category->id }}">
-                                    {{ $category->category_name }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-
-                <div class="tab-content">
-                    @foreach($types as $key => $category)
-                        <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
-                            <div class="row g-4">
-                                @foreach($category->dishes as $dish)
-                                    <div class="col-lg-6">
-                                        <div
-                                            class="menu-item d-flex align-items-center position-relative dish-card p-3 border rounded shadow-sm">
-                                            <a href="{{ route('dish.details', $dish->id) }}" class="dish-overlay">
-                                                <div class="d-none d-md-block"></div>
-                                                <span class="view-button btn btn-primary btn-sm d-inline d-md-none">View</span>
-                                            </a>
-
-                                            <!-- Dish Image -->
-                                            <div class="ratio ratio-1x1 img-responsive rounded">
-                                                <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
-                                                    class="img-fluid rounded dish-img" />
-                                            </div>
-
-                                            <!-- Dish Details -->
-                                            <div class="w-100 d-flex flex-column text-start">
-                                                <h4 class="mb-2">{{ $dish->name }}</h4>
-
-                                                <!-- Rating & Price on Same Line -->
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <span class="badge bg-success text-white px-2 py-1">
-                                                        ⭐
-                                                        {{ number_format($dish->reviews->count() > 0 ? round($dish->reviews->avg('rating')) : 5, 1) }}
-                                                    </span>
-
-                                                    @if($dish->quantities->isNotEmpty())
-                                                        @php
-                                                            $firstQuantity = $dish->quantities->first();
-                                                            $discountPrice = $firstQuantity->discount_price ?? $firstQuantity->original_price;
-                                                        @endphp
-                                                        <div class="text-start prices text-lg-start text-center">
-                                                            <span class="fs-6 fw-bold text-success discount-price-display"
-                                                                style="font-size: 1.6rem !important;">
-                                                                {{ convertPrice($firstQuantity->original_price ?? 0) }}
-                                                            </span>
-                                                            <p class="text-primary text-decoration-line-through original-price-display mb-0"
-                                                                style="font-size: 1.5rem !important;">
-                                                                {{ convertPrice($discountPrice) }}
-                                                            </p>
-                                                        </div>
-                                                    @else
-                                                        <p class="text-muted">Price not available</p>
-                                                    @endif
-                                                </div>
-
-                                                <!-- Dish Description -->
-                                                <p class="text-muted mt-2">{{ Str::limit($dish->description, 50) }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <!-- "View All" Button -->
-                            <div class="text-center mt-4">
-                                <a href="{{ route('menu', ['category' => $category->id]) }}"
-                                    class="btn btn-primary rounded-pill px-4 py-2">
-                                    View All {{ $category->category_name }}
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- Our collection End -->
+    
 
     <!-- Team Start -->
     <!-- <div class="container-fluid team py-6">
-                                    <div class="container">
-                                        <div class="text-center">
-                                            <small
-                                                class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">Our
-                                                Team</small>
-                                            <h1 class="display-5 mb-5">We have experienced chef Team</h1>
-                                        </div>
-                                        <div class="row g-4">
-                                            <div class="col-lg-3 col-md-6">
-                                                <div class="team-item rounded">
-                                                    <img class="img-fluid rounded-top" src="img/chef1.jpg" alt="" />
-                                                    <div class="team-content text-center py-3 bg-danger rounded-bottom">
-                                                        <h4 class="text-light">Chef 1</h4>
-                                                        <p class="text-white mb-0">Professional Chef</p>
-                                                    </div>
-                                                    <div class="team-icon d-flex flex-column justify-content-center m-4">
-                                                        <a class="share btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fas fa-share-alt"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-facebook-f"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-twitter"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-instagram"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6" data-wow-delay="0.3s">
-                                                <div class="team-item rounded">
-                                                    <img class="img-fluid rounded-top" src="img/chef2.jpg" alt="" />
-                                                    <div class="team-content text-center py-3 bg-danger rounded-bottom">
-                                                        <h4 class="text-light">Chef 2</h4>
-                                                        <p class="text-white mb-0">Professional Chef</p>
-                                                    </div>
-                                                    <div class="team-icon d-flex flex-column justify-content-center m-4">
-                                                        <a class="share btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fas fa-share-alt"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-facebook-f"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-twitter"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-instagram"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6" data-wow-delay="0.5s">
-                                                <div class="team-item rounded">
-                                                    <img class="img-fluid rounded-top" src="img/chef3.jpg" alt="" />
-                                                    <div class="team-content text-center py-3 bg-danger rounded-bottom">
-                                                        <h4 class="text-light">Chef 3</h4>
-                                                        <p class="text-white mb-0">Professional Chef</p>
-                                                    </div>
-                                                    <div class="team-icon d-flex flex-column justify-content-center m-4">
-                                                        <a class="share btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fas fa-share-alt"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-facebook-f"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-twitter"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-instagram"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6" data-wow-delay="0.7s">
-                                                <div class="team-item rounded">
-                                                    <img class="img-fluid rounded-top" src="img/chef4.jpg" alt="" />
-                                                    <div class="team-content text-center py-3 bg-danger rounded-bottom">
-                                                        <h4 class="text-light">Chef 4</h4>
-                                                        <p class="text-white mb-0">Professional Chef</p>
-                                                    </div>
-                                                    <div class="team-icon d-flex flex-column justify-content-center m-4">
-                                                        <a class="share btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fas fa-share-alt"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-facebook-f"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-twitter"></i></a>
-                                                        <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
-                                                                class="fab fa-instagram"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
+                                                        <div class="container">
+                                                            <div class="text-center">
+                                                                <small
+                                                                    class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">Our
+                                                                    Team</small>
+                                                                <h1 class="display-5 mb-5">We have experienced chef Team</h1>
+                                                            </div>
+                                                            <div class="row g-4">
+                                                                <div class="col-lg-3 col-md-6">
+                                                                    <div class="team-item rounded">
+                                                                        <img class="img-fluid rounded-top" src="img/chef1.jpg" alt="" />
+                                                                        <div class="team-content text-center py-3 bg-danger rounded-bottom">
+                                                                            <h4 class="text-light">Chef 1</h4>
+                                                                            <p class="text-white mb-0">Professional Chef</p>
+                                                                        </div>
+                                                                        <div class="team-icon d-flex flex-column justify-content-center m-4">
+                                                                            <a class="share btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fas fa-share-alt"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-facebook-f"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-twitter"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-instagram"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-6" data-wow-delay="0.3s">
+                                                                    <div class="team-item rounded">
+                                                                        <img class="img-fluid rounded-top" src="img/chef2.jpg" alt="" />
+                                                                        <div class="team-content text-center py-3 bg-danger rounded-bottom">
+                                                                            <h4 class="text-light">Chef 2</h4>
+                                                                            <p class="text-white mb-0">Professional Chef</p>
+                                                                        </div>
+                                                                        <div class="team-icon d-flex flex-column justify-content-center m-4">
+                                                                            <a class="share btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fas fa-share-alt"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-facebook-f"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-twitter"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-instagram"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-6" data-wow-delay="0.5s">
+                                                                    <div class="team-item rounded">
+                                                                        <img class="img-fluid rounded-top" src="img/chef3.jpg" alt="" />
+                                                                        <div class="team-content text-center py-3 bg-danger rounded-bottom">
+                                                                            <h4 class="text-light">Chef 3</h4>
+                                                                            <p class="text-white mb-0">Professional Chef</p>
+                                                                        </div>
+                                                                        <div class="team-icon d-flex flex-column justify-content-center m-4">
+                                                                            <a class="share btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fas fa-share-alt"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-facebook-f"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-twitter"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-instagram"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-6" data-wow-delay="0.7s">
+                                                                    <div class="team-item rounded">
+                                                                        <img class="img-fluid rounded-top" src="img/chef4.jpg" alt="" />
+                                                                        <div class="team-content text-center py-3 bg-danger rounded-bottom">
+                                                                            <h4 class="text-light">Chef 4</h4>
+                                                                            <p class="text-white mb-0">Professional Chef</p>
+                                                                        </div>
+                                                                        <div class="team-icon d-flex flex-column justify-content-center m-4">
+                                                                            <a class="share btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fas fa-share-alt"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-facebook-f"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-twitter"></i></a>
+                                                                            <a class="share-link btn btn-primary btn-md-square rounded-circle mb-2" href=""><i
+                                                                                    class="fab fa-instagram"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
     <!-- Team End -->
 
     <!-- Testimonial Start -->

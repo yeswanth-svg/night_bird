@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Type extends Model
 {
-    //
     protected $fillable = [
-        'category_id ',
+        'category_id',
         'name',
+        'image', // Added image to fillable
     ];
 
     public function category()
@@ -19,6 +19,6 @@ class Type extends Model
 
     public function dishes()
     {
-        return $this->hasMany(Dish::class, 'type_id'); // 'dish_type_id' is the foreign key in dishes table
+        return $this->hasMany(Dish::class, 'type_id');
     }
 }

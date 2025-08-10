@@ -53,7 +53,7 @@ class DishController extends Controller
         $dish->name = $request->name;
         $dish->description = $request->description;
         $dish->type_id = $request->type_id;
-        $dish->spice_level = "mild";
+        // $dish->spice_level = "mild";
 
         // 🔹 Handle Main Image Upload
         if ($request->hasFile('main_image')) {

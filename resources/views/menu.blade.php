@@ -2,9 +2,27 @@
 @section('title', 'Our Collection')
 @section('content')
 
- <style>
+  <style>
     .breadcrumb-item a {
     color: #fff;
+    }
+
+    .category-sidebar a {
+    text-decoration: none;
+    transition: color 0.2s;
+    }
+
+    .category-sidebar a:hover {
+    color: #0d6efd;
+    }
+
+    .category-sidebar>li>a {
+    font-weight: 600;
+    }
+
+    .category-sidebar ul li a {
+    font-weight: 400;
+    font-size: 0.95rem;
     }
   </style>
 
@@ -21,80 +39,100 @@
   <!-- Hero End -->
 
   <!-- Menu Section Start -->
-  <div class="container-fluid menu py-6" id="full_menu">
-    <div class="container">
-    <!-- Header -->
-    <div class="text-center">
-      <small
-      class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
-      Full Menu
-      </small>
-      <h1 class="display-5 mb-5">Explore Our Wide Range of Pickles & Sweets</h1>
-    </div>
 
-    <!-- Category Tabs -->
-    <div class="category-tabs-wrapper">
-      <ul class="nav nav-pills d-flex category-tabs mb-5">
-      @foreach($categories as $key => $category)
-      <li class="nav-item">
-      <a class="nav-link px-3 py-2 border border-primary bg-white rounded-pill category-tab 
-      {{ ($selectedCategory == $category->id) ? 'active' : '' }}"
-      href="{{ route('menu', ['category' => $category->id]) }}">
-      {{ $category->category_name }}
-      </a>
-      </li>
-    @endforeach
+  <div class="container py-4">
+    <div class="row">
 
+    <!-- LEFT COLUMN: Categories -->
+    <div class="col-lg-3 mb-4">
+      <div class="p-3 border rounded bg-light shadow-sm">
+      <h5 class="fw-bold mb-3">Categories</h5>
+      <hr>
+      <ul class="list-unstyled category-sidebar">
+        @foreach($categories as $category)
+        <li class="mb-2">
+        <a class="d-flex justify-content-between align-items-center text-dark fw-semibold" data-bs-toggle="collapse"
+        href="#category-{{ $category->id }}"
+        aria-expanded="{{ $selectedTypeId && $category->types->contains('id', $selectedTypeId) ? 'true' : 'false' }}"
+        aria-controls="category-{{ $category->id }}">
+        {{ $category->category_name }}
+        <span class="toggle-icon">+</span>
+        </a>
 
+        @if($category->types->count())
+        <ul
+        class="list-unstyled ms-3 collapse {{ $category->types->contains('id', $selectedTypeId) ? 'show' : '' }}"
+        id="category-{{ $category->id }}">
+        @foreach($category->types as $type)
+        <li class="mb-1">
+        <a href="{{ route('menu', ['category' => $type->id]) }}"
+        class="text-muted {{ $selectedTypeId == $type->id ? 'fw-bold text-primary' : '' }}">
+        {{ $type->name }}
+        </a>
+        </li>
+      @endforeach
+        </ul>
+      @endif
+        </li>
+      @endforeach
       </ul>
+      </div>
     </div>
 
-    <!-- Dishes Listing -->
-    <div class="tab-content">
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      @foreach($dishes as $dish)
-      <div class="col">
-      <div class="menu-item d-flex align-items-center position-relative dish-card">
-      <a href="{{ route('dish.details', $dish->id) }}" class="dish-overlay">
-        <div class="overlay-effect d-none d-md-block"></div>
-        <span class="view-button btn btn-primary btn-sm d-inline d-md-none">View</span>
-      </a>
+    <!-- RIGHT COLUMN: Dishes -->
+    <div class="col-lg-9">
+      <div class="row">
+      @forelse($dishes as $dish)
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="p-3 border rounded shadow-sm text-center h-100">
+        <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}" class="img-fluid mb-2"
+        style="height:150px; object-fit:cover;">
 
-      <!-- Dish Image -->
-      <div class="ratio ratio-1x1 img-responsive">
-        <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
-        class="img-fluid rounded dish-img" />
-      </div>
+        <h6>{{ $dish->name }}</h6>
 
-      <!-- Dish Details -->
-      <div class="w-100 d-flex flex-column text-start ps-4">
-        <h4>{{ $dish->name }}</h4>
-        <div class="d-flex align-items-center gap-2 mt-1">
-        <span class="badge bg-success text-white px-2 py-1">
-        ⭐ {{ number_format($dish->rating, 1) }}
+        @php
+        $quantity = $dish->quantities ? $dish->quantities->first() : null;
+      @endphp
+
+        @if($quantity)
+      <p class="mb-1">
+        <span class="text-muted text-decoration-line-through">
+        ₹{{ number_format($quantity->original_price, 2) }}
         </span>
+        <span class="fw-bold text-danger ms-1">
+        ₹{{ number_format($quantity->discount_price, 2) }}
+        </span>
+      </p>
+      @else
+      <p class="text-muted mb-1">Price not available</p>
+      @endif
+
+        <a href="{{ route('dish.details', $dish->id) }}" class="btn btn-sm btn-primary">View</a>
         </div>
-        <p class="text-muted">{{ Str::limit($dish->description, 50) }}</p>
       </div>
+    @empty
+      <div class="col-12">
+      <p class="text-muted">Select a category to view dishes.</p>
       </div>
-      </div>
-    @endforeach
+    @endforelse
       </div>
 
       <!-- Pagination -->
-      <div class="mt-4 d-flex justify-content-center">
-      {{ $dishes->appends(['category' => $selectedCategory])->links() }}
-
+      <div class="mt-3">
+      {{ $dishes->links() }}
       </div>
-
     </div>
+
+
     </div>
   </div>
 
   <!-- Menu Section End -->
 
 
+
   <script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
     const dishCards = document.querySelectorAll(".dish-card");
@@ -117,6 +155,25 @@
     });
 
   </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (link) {
+      link.addEventListener('click', function () {
+      const icon = this.querySelector('.toggle-icon');
+      const target = document.querySelector(this.getAttribute('href'));
+
+      target.addEventListener('shown.bs.collapse', function () {
+        icon.textContent = '-';
+      });
+      target.addEventListener('hidden.bs.collapse', function () {
+        icon.textContent = '+';
+      });
+      });
+    });
+    });
+  </script>
+
 
 
 @endsection

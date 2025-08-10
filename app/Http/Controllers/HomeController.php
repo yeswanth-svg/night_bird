@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Dish;
 use App\Models\Type;
+use App\Models\DishQuantity;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -30,21 +31,26 @@ class HomeController extends Controller
         return view('about');
     }
 
-    public function menu(Request $request)
-    {
-        $categories = Category::all();
+  public function menu(Request $request)
+{
+    // Load categories with their types
+    $categories = Category::with('types')->get();
 
-        // Get selected category OR set the first category as default
-        $selectedCategory = $request->input('category', optional($categories->first())->id);
+    // Selected type (ID passed from sidebar)
+    $selectedTypeId = $request->input(
+        'category',
+        optional($categories->first()?->types->first())->id
+    );
 
-        // Filter dishes based on category
-        $query = Dish::query()->where('type_id', $selectedCategory);
+    // Get dishes for selected type WITH quantities
+    $dishes = Dish::with('quantities')
+        ->where('type_id', $selectedTypeId)
+        ->paginate(12);
 
-        // Paginate results (12 per page)
-        $dishes = $query->paginate(12);
+    return view('menu', compact('categories', 'dishes', 'selectedTypeId'));
+}
 
-        return view('menu', compact('categories', 'dishes', 'selectedCategory'));
-    }
+
 
 
 

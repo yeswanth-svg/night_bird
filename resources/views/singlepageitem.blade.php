@@ -87,14 +87,14 @@
                         $averageRating = $dish->reviews->count() > 0 ? round($dish->reviews->avg('rating')) : 5;
                     @endphp
 
-                    <p class="text-dark fw-bold">
+                    <!-- <p class="text-dark fw-bold">
                         @for ($i = 1; $i <= 5; $i++)
                             <i class="fas fa-star {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
                         @endfor
                         <span class="ms-2">
                             {{ number_format($averageRating, 1) }}&nbsp;({{ $dish->reviews->count() }})
                         </span>
-                    </p>
+                    </p> -->
 
                     <br>
 
@@ -134,14 +134,14 @@
                             @endforeach
                         </select>
 
-                        <label for="Spicy Level" class="visually-hidden">Spicy Level</label>
+                        <!-- <label for="Spicy Level" class="visually-hidden">Spicy Level</label>
                         <select class="form-select select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                             <option value="">Spice Level</option>
                             <option value="mild">Mild 🌶️</option>
                             <option value="medium">Medium 🌶️🌶️</option>
                             <option value="spicy">Spicy 🌶️🌶️🌶️</option>
                             <option value="extra_spicy">Extra Spicy 🔥</option>
-                        </select>
+                        </select> -->
                     </div>
                 </div>
 

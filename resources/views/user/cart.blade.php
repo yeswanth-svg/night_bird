@@ -41,18 +41,18 @@
                                     {{ $item->cart_quantity }}
                                 </p>
 
-                                <p style="margin: 4px 0; font-size: 0.9rem;">
-                                    🌶️ Spice Level:
-                                    @if ($item->spice_level == 'mild')
-                                        <span class="badge bg-success p-2">🌱 Mild</span>
-                                    @elseif ($item->spice_level == 'medium')
-                                        <span class="badge bg-warning text-dark p-2">🌶️ Medium</span>
-                                    @elseif ($item->spice_level == 'spicy')
-                                        <span class="badge bg-danger p-2">🔥 Spicy</span>
-                                    @elseif ($item->spice_level == 'extra_spicy')
-                                        <span class="badge bg-dark text-light p-2">☠️ Extra Spicy</span>
-                                    @endif
-                                </p>
+                                <!-- <p style="margin: 4px 0; font-size: 0.9rem;">
+                                                    🌶️ Spice Level:
+                                                    @if ($item->spice_level == 'mild')
+                                                        <span class="badge bg-success p-2">🌱 Mild</span>
+                                                    @elseif ($item->spice_level == 'medium')
+                                                        <span class="badge bg-warning text-dark p-2">🌶️ Medium</span>
+                                                    @elseif ($item->spice_level == 'spicy')
+                                                        <span class="badge bg-danger p-2">🔥 Spicy</span>
+                                                    @elseif ($item->spice_level == 'extra_spicy')
+                                                        <span class="badge bg-dark text-light p-2">☠️ Extra Spicy</span>
+                                                    @endif
+                                                </p> -->
 
 
                                 <p style="margin: 4px 0; font-size: 1rem;">
@@ -83,7 +83,7 @@
                             <button type="submit" class="trash-button">
                                 <i class="fas fa-trash-alt"
                                     style="    font-size: 1.2rem;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    padding: 2px;"></i>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    padding: 2px;"></i>
                             </button>
                         </form>
                     </div>
@@ -94,37 +94,6 @@
                 <div class="right-panel col-12 col-lg-4">
 
                     <div class="card cart mt-3 p-3" style="border-radius: inherit;">
-
-                        @if($eligibleReward || $nextThreshold)
-                            <p class="mb-2">
-                                <i class="fas fa-gift text-primary"></i>
-
-                                @if($eligibleReward)
-                                    🎉 <span class="font-weight-bold text-success">
-                                        You are eligible for <strong>{{ $eligibleReward->reward_message }}</strong>! 🏆
-                                    </span>
-                                @endif
-
-                                @if($nextThreshold)
-                                    Shop for <span class="font-weight-bold text-primary">
-                                        {{ convertPrice($remainingForNextReward) }}</span>
-                                    more to unlock <span
-                                        class="text-primary font-weight-bold">{{ $nextThreshold->reward_message }}!</span>
-                                @endif
-                            </p>
-
-                            <div class="progress mb-2" style="height: 8px;">
-                                <div class="progress-bar {{ $eligibleReward ? 'bg-success' : 'bg-warning' }}" role="progressbar"
-                                    style="width: {{ min(100, ($finalTotal / ($nextThreshold->min_cart_value ?? $finalTotal)) * 100) }}%;"
-                                    aria-valuenow="{{ convertPrice($finalTotal) }}" aria-valuemin="0"
-                                    aria-valuemax="{{ convertPrice($nextThreshold->min_cart_value ?? $finalTotal) }}">
-                                </div>
-                            </div>
-                        @endif
-
-
-
-                        <!-- <div class="text-muted small">No Customs Duties</div> -->
 
                         <div class="d-flex justify-content-between mt-2">
                             <span>Total:</span>
@@ -143,10 +112,10 @@
                             <span class="fw-bold fs-4">{{ convertPrice($finalTotal) }}</span>
                         </div>
 
-                        @if (!$isWeightValid)
+                        {{-- Minimum order price check --}}
+                        @if ($finalTotal < 1000)
                             <div class="alert alert-warning mt-3">
-                                {{ $warningMessage }} .Minimun Weight Should Be:<span class="savings">"{{ $weight }}"</span>
-                                <!-- Display dynamic warning message -->
+                                Minimum order value should be <strong>{{ convertPrice(1000) }}</strong>.
                             </div>
                             <button class="btn btn-primary btn-block mt-3" disabled>
                                 CHECKOUT
@@ -157,11 +126,11 @@
                             </a>
                         @endif
 
-
                         <a href="{{ url('/') }}" class="btn btn-outline-primary btn-block mt-2">
                             CONTINUE SHOPPING
                         </a>
                     </div>
+
 
                 </div>
 

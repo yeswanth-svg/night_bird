@@ -41,10 +41,20 @@
                                         <label for="dishName" class="form-label text-success fw-bold fs-4">Type</label>
                                         <select class="form-select form-control" name="type_id">
                                             <option value="">Select Category</option>
-                                            @foreach($types as $type)
-                                                <option value="{{$type->id}}">{{$type->name}}</option>
+                                            @php
+                                                // Group all type categories by their main category name (Mens, Womens, Kids, etc.)
+                                                $groupedTypes = $types->groupBy(fn($type) => $type->category->category_name);
+                                            @endphp
+
+                                            @foreach($groupedTypes as $mainCategory => $categoryTypes)
+                                                <optgroup label="{{ $mainCategory }}">
+                                                    @foreach($categoryTypes as $type)
+                                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
                                             @endforeach
                                         </select>
+
                                     </div>
                                     <!-- Dish Name -->
                                     <div class="col-md-6 mb-3">
@@ -80,17 +90,17 @@
                                             placeholder="e.g., Chicken Pickel" required>{{old('description')}}</textarea>
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        <label for="description" class="form-label text-success fw-bold fs-4">Spice
-                                            Level</label>
-                                        <select class="form-select" name="spice_level">
-                                            <option value="" selected>Select Status</option>
-                                            <option value="mild">Mild</option>
-                                            <option value="medium">Medium</option>
-                                            <option value="spicy">Spicy</option>
-                                            <option value="extra_spicy">extra Spicy</option>
-                                        </select>
-                                    </div>
+                                    <!-- <div class="col-md-6 mb-3">
+                                            <label for="description" class="form-label text-success fw-bold fs-4">Spice
+                                                Level</label>
+                                            <select class="form-select" name="spice_level">
+                                                <option value="" selected>Select Status</option>
+                                                <option value="mild">Mild</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="spicy">Spicy</option>
+                                                <option value="extra_spicy">extra Spicy</option>
+                                            </select>
+                                        </div> -->
 
 
                                     <!-- Submit Button -->

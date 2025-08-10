@@ -38,26 +38,35 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="dishName"
+                                        <label for="category_id"
                                             class="form-label text-success fw-bold fs-4">Categories</label>
-                                        <select class="form-select form-control" name="category_id">
+                                        <select class="form-select form-control" name="category_id" id="category_id"
+                                            required>
                                             <option value="">Select Category</option>
                                             @foreach($categories as $type)
-                                                <option value="{{$type->id}}">{{$type->category_name}}</option>
+                                                <option value="{{ $type->id }}">{{ $type->category_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <!-- Dish Name -->
+
+                                    <!-- Type Name -->
                                     <div class="col-md-6 mb-3">
                                         <label for="name" class="form-label text-success fw-bold fs-4">Name</label>
                                         <input type="text" name="name" id="name" class="form-control"
-                                            placeholder="e.g., Full Length Shorts" required value="{{old('name')}}">
+                                            placeholder="e.g., Full Length Shorts" required value="{{ old('name') }}">
+                                    </div>
+
+                                    <!-- Image Upload -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="image" class="form-label text-success fw-bold fs-4">Image</label>
+                                        <input type="file" name="image" id="image" class="form-control" accept="image/*">
                                     </div>
 
                                     <!-- Submit Button -->
                                     <div class="mt-4">
                                         <button type="submit" class="btn btn-primary">Save</button>
                                     </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -65,8 +74,5 @@
             </div>
         </div>
     </div>
-
-
-
 
 @endsection
