@@ -2,12 +2,16 @@
 @section('title', 'Add Ticket')
 
 @section('content')
-
+<style>
+        .breadcrumb-item a {
+            color: #fff;
+        }
+    </style>
 
     <!-- Hero Section -->
     <div class="container-fluid py-6 my-6 mt-0" style="
-        background: url({{  asset('img/bg-cover.jpg')}});
-        color: white;height: 379px;">
+        background: url({{  asset('img/bg-cover1.png')}});
+        color: white;height: 340px;">
         <div class="container text-center animated bounceInDown">
             <h1 class="display-1 mb-4" style="color: white">Add Ticket</h1>
             <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">

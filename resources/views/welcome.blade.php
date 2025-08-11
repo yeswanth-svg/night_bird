@@ -72,9 +72,9 @@
 
         /* Product Info */
         .product-title {
-            font-size: 14px;
+            font-size: 25px;
             font-weight: 600;
-            color: #333;
+            color: #052c65;
         }
 
         .product-price {
