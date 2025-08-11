@@ -101,7 +101,7 @@
                     <a href="{{route('admin.dashboard')}}" class="logo">
                         <!-- <img src="{{asset('admin/img/kaiadmin/logo_dark.svg')}}" alt="navbar brand" class="navbar-brand"
                             height="20" /> -->
-                        <h2 class="text-light">Pickel House</h2>
+                        <h2 class="text-light">Nightbird</h2>
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -131,7 +131,7 @@
                             <span class="sidebar-mini-icon">
                                 <i class="fa fa-ellipsis-h"></i>
                             </span>
-                            <h4 class="text-section">Cookbook Recipes</h4>
+                            <h4 class="text-section">Categories</h4>
                         </li>
                         <li class="nav-item {{ request()->is('admin/category*') ? 'active' : '' }}">
                             <a href="{{route('admin.category.index')}}">

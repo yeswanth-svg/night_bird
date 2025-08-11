@@ -81,7 +81,7 @@
             <nav class="navbar navbar-light navbar-expand-lg py-4">
                 <a href="{{url('/')}}" class="navbar-brand">
                     <h1 class="text-primary fw-bold mb-0 d-flex align-items-center">
-                        <img src="{{ asset('img/logo5.png') }}" alt="PickleHouse Logo" class="me-2 img-fluid"
+                        <img src="{{ asset('img/logo5.png') }}" alt="Nightbird Logo" class="me-2 img-fluid"
                             style="max-width: 100px; max-height: 100px;">
                     </h1>
                 </a>
@@ -225,43 +225,22 @@
 
                     <!-- Currency Selection Dropdown -->
                     @php
-                        // Get the logged-in user's country (default to INR if not logged in)
-                        $userCountry = auth()->check() ? auth()->user()->country : 'INR';
-
-                        // Get the stored session currency (if the user changed it)
-                        $sessionCurrency = session('selected_currency', $userCountry);
-
-                        // Currency flag mapping
-                        $flags = [
-                            'INR' => asset('img/flags/inr.png'),
-                            'USD' => asset('img/flags/usd.png'),
-                            'AUD' => asset('img/flags/aud.png'),
-                            'CAD' => asset('img/flags/cad.png'),
-                        ];
-
-                        // Use the session currency flag (or default to user's country)
-                        $selectedFlag = $flags[$sessionCurrency] ?? asset('img/flags/inr.png');
+                        $sessionCurrency = 'INR';
+                        $selectedFlag = asset('img/flags/inr.png');
                     @endphp
-
 
                     <div class="dropdown me-4">
                         <button class="btn btn-light dropdown-toggle" type="button" id="currencyDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img id="selected-flag" src="{{ $selectedFlag }}" width="25" class="me-1" alt="flags">
-                            <span id="selected-currency-text"> {{ $sessionCurrency }} </span>
+                            <img src="{{ $selectedFlag }}" width="25" class="me-1" alt="flag">
+                            <span>{{ $sessionCurrency }}</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
-                            <li><a class="dropdown-item currency-option" href="#" data-country="INR"
-                                    data-flag="{{ asset('img/flags/inr.png') }}">🇮🇳 INR</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-country="USD"
-                                    data-flag="{{ asset('img/flags/usd.png') }}">🇺🇸 USD</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-country="AUD"
-                                    data-flag="{{ asset('img/flags/aud.png') }}">🇦🇺 AUD</a></li>
-                            <li><a class="dropdown-item currency-option" href="#" data-country="CAD"
-                                    data-flag="{{ asset('img/flags/cad.png') }}">🇨🇦 CAD</a></li>
+                            <li><a class="dropdown-item" href="#">🇮🇳 {{ $sessionCurrency }}</a></li>
                         </ul>
                     </div>
-                    <!-- end Currency Selection Dropdown -->
+
+
 
 
                     <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex"
@@ -440,8 +419,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    <span class="text-light"><a href="#"><i
-                                class="fas fa-copyright text-light me-2"></i>NightBird</a>, All right
+                    <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>NightBird</a>,
+                        All right
                         reserved.</span>
                 </div>
                 <div class="col-md-6 my-auto text-center text-md-end text-white">
@@ -910,14 +889,14 @@
                             }
 
                             let messageItem = `
-                                                                                                                                                    <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
-                                                                                                                                                        <div class="notif-content">
-                                                                                                                                                            <span class="fw-bold">${notification.data.username}</span>
-                                                                                                                                                            <span class="d-block small text-muted">${notification.data.message}</span>
-                                                                                                                                                            <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
-                                                                                                                                                        </div>
-                                                                                                                                                    </a>
-                                                                                                                                                `;
+                                                                                                                                                            <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
+                                                                                                                                                                <div class="notif-content">
+                                                                                                                                                                    <span class="fw-bold">${notification.data.username}</span>
+                                                                                                                                                                    <span class="d-block small text-muted">${notification.data.message}</span>
+                                                                                                                                                                    <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
+                                                                                                                                                                </div>
+                                                                                                                                                            </a>
+                                                                                                                                                        `;
 
                             messageList.innerHTML += messageItem;
                             messageListMobile.innerHTML += messageItem;
