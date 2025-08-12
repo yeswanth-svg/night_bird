@@ -42,17 +42,17 @@
                                 </p>
 
                                 <!-- <p style="margin: 4px 0; font-size: 0.9rem;">
-                                                    🌶️ Spice Level:
-                                                    @if ($item->spice_level == 'mild')
-                                                        <span class="badge bg-success p-2">🌱 Mild</span>
-                                                    @elseif ($item->spice_level == 'medium')
-                                                        <span class="badge bg-warning text-dark p-2">🌶️ Medium</span>
-                                                    @elseif ($item->spice_level == 'spicy')
-                                                        <span class="badge bg-danger p-2">🔥 Spicy</span>
-                                                    @elseif ($item->spice_level == 'extra_spicy')
-                                                        <span class="badge bg-dark text-light p-2">☠️ Extra Spicy</span>
-                                                    @endif
-                                                </p> -->
+                                                            🌶️ Spice Level:
+                                                            @if ($item->spice_level == 'mild')
+                                                                <span class="badge bg-success p-2">🌱 Mild</span>
+                                                            @elseif ($item->spice_level == 'medium')
+                                                                <span class="badge bg-warning text-dark p-2">🌶️ Medium</span>
+                                                            @elseif ($item->spice_level == 'spicy')
+                                                                <span class="badge bg-danger p-2">🔥 Spicy</span>
+                                                            @elseif ($item->spice_level == 'extra_spicy')
+                                                                <span class="badge bg-dark text-light p-2">☠️ Extra Spicy</span>
+                                                            @endif
+                                                        </p> -->
 
 
                                 <p style="margin: 4px 0; font-size: 1rem;">
@@ -83,7 +83,7 @@
                             <button type="submit" class="trash-button">
                                 <i class="fas fa-trash-alt"
                                     style="    font-size: 1.2rem;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    padding: 2px;"></i>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            padding: 2px;"></i>
                             </button>
                         </form>
                     </div>
@@ -126,7 +126,7 @@
                             </a>
                         @endif
 
-                        <a href="{{ url('/') }}" class="btn btn-outline-primary btn-block mt-2">
+                        <a href="{{ url('/menu') }}" class="btn btn-outline-primary btn-block mt-2">
                             CONTINUE SHOPPING
                         </a>
                     </div>

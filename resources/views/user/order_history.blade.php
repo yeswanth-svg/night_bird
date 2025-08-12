@@ -138,7 +138,7 @@
                                     <th>Order Stage</th>
                                     <th>Payment Status</th> 
                                     <th>Order Address</th>
-                                    <th>Action</th>
+                                    <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -148,8 +148,8 @@
 
                                         <td><span>{{ $order->dish->name }}</span></td>
                                         <td>{{ $order->cart_quantity }}</td>
-                                        <td><span>{{ convertPrice(($order->total_amount + $order->shipping_cost) - $order->coupon_discount ?? 0) }}</span>
-                                        </td>
+                                        <!-- <td><span>{{ convertPrice(($order->total_amount + $order->shipping_cost) - $order->coupon_discount ?? 0) }}</span>
+                                        </td> -->
 
 
                                         <td><span
@@ -158,7 +158,7 @@
                                         <td><span
                                                 class="badge bg-{{ getPaymentStateColor($order->payment_state) }}">{{ ucfirst($order->payment_state) }}</span>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             @if ($order->spice_level == 'mild')
                                                 <span class="badge bg-success p-2">
                                                     🌱 Mild
@@ -176,7 +176,7 @@
                                                     ☠️ Extra Spicy
                                                 </span>
                                             @endif
-                                        </td>
+                                        </td> -->
 
                                         <td onclick="toggleAddress(this)" style="cursor: pointer;">
                                             @php 
