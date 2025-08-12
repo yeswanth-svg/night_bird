@@ -5,7 +5,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Dish</h3>
+                <h3 class="fw-bold mb-3">Dress</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="#">
@@ -16,7 +16,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Dish</a>
+                        <a href="#">Dress</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -30,7 +30,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Edit Dish</h4>
+                            <h4 class="card-title">Edit Dress</h4>
                         </div>
                         <div class="card-body">
                             <form method="post" action="{{ route('admin.dishes.update', $dish->id) }}"
@@ -39,18 +39,27 @@
                                 @method('put')
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="dishName" class="form-label text-success fw-bold fs-4">Category</label>
+                                        <label for="dishName" class="form-label text-success fw-bold fs-4">Type</label>
                                         <select class="form-select form-control" name="type_id">
-                                            <option value="{{$dish->type_id}}">{{$dish->type->name}}
-                                            </option>
-                                            @foreach($types as $type)
-                                                <option value="{{$type->id}}">{{$type->name}}</option>
+                                            <option value="">Select Category</option>
+                                            @php
+                                                // Group all type categories by their main category name (Mens, Womens, Kids, etc.)
+                                                $groupedTypes = $types->groupBy(fn($type) => $type->category->category_name);
+                                            @endphp
+
+                                            @foreach($groupedTypes as $mainCategory => $categoryTypes)
+                                                <optgroup label="{{ $mainCategory }}">
+                                                    @foreach($categoryTypes as $type)
+                                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
                                             @endforeach
                                         </select>
+
                                     </div>
                                     <!-- Dish Name -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="name" class="form-label text-success fw-bold fs-4">Dish Name</label>
+                                        <label for="name" class="form-label text-success fw-bold fs-4">Dress Name</label>
                                         <input type="text" name="name" id="name" class="form-control"
                                             placeholder="e.g., Chicken Biryani" value="{{$dish->name}}">
                                     </div>
@@ -125,12 +134,12 @@
 
 
 
-                                    <div class="col-md-6 mb-3">
+                                    <!-- <div class="col-md-6 mb-3">
                                         <label for="dish_tag" class="form-label text-success fw-bold fs-4">Tag</label>
                                         <input type="text" class="form-control" id="dish_tag" name="dish_tags"
                                             placeholder="Eg: No Oil, No Preservatives (comma-separated)"
                                             value="{{ !empty($dish->dish_tags) ? implode(', ', json_decode($dish->dish_tags, true)) : '' }}">
-                                    </div>
+                                    </div> -->
 
 
 

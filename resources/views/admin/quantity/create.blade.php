@@ -5,7 +5,7 @@
     <div class="container">
         <div class="page-inner">
             <div class="page-header">
-                <h3 class="fw-bold mb-3">Dish Quantity</h3>
+                <h3 class="fw-bold mb-3">Dress Quantity</h3>
                 <ul class="breadcrumbs mb-3">
                     <li class="nav-home">
                         <a href="{{route('admin.quantity.index')}}">
@@ -16,7 +16,7 @@
                         <i class="icon-arrow-right"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="{{route('admin.quantity.index')}}">Dish Quantity</a>
+                        <a href="{{route('admin.quantity.index')}}">Dress Quantity</a>
                     </li>
                     <li class="separator">
                         <i class="icon-arrow-right"></i>
@@ -38,9 +38,9 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="dishName" class="form-label text-success fw-bold fs-4">Dishes</label>
+                                        <label for="dishName" class="form-label text-success fw-bold fs-4">Dresses</label>
                                         <select class="form-select form-control" name="dish_id">
-                                            <option value="">Select Dish</option>
+                                            <option value="">Select Dress</option>
                                             @foreach($dishes as $type)
                                                 <option value="{{$type->id}}">{{$type->name}}</option>
                                             @endforeach

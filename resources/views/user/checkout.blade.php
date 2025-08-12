@@ -56,26 +56,26 @@
                         </select>
                     </div>
 
-                    @php
-                        $userCountry = auth()->user()->country;
+                    <!-- @php
+                                    $userCountry = auth()->user()->country;
 
-                        // Mapping currency codes to country names
-                        $countryMap = [
-                            'USD' => 'USA',
-                            'CAD' => 'Canada',
-                            'AUD' => 'Australia'
-                        ];
+                                    // Mapping currency codes to country names
+                                    $countryMap = [
+                                        'USD' => 'USA',
+                                        'CAD' => 'Canada',
+                                        'AUD' => 'Australia'
+                                    ];
 
-                        // Convert user country if it's a currency code
-                        $userCountry = $countryMap[$userCountry] ?? $userCountry;
+                                    // Convert user country if it's a currency code
+                                    $userCountry = $countryMap[$userCountry] ?? $userCountry;
 
-                        // Define available countries
-                        $countries = ['USA', 'Canada', 'Australia'];
+                                    // Define available countries
+                                    $countries = ['USA', 'Canada', 'Australia'];
 
-                        // Move the user country to the top if it exists in the list
-                        $filteredCountries = array_diff($countries, [$userCountry]);
-                        array_unshift($filteredCountries, $userCountry);
-                    @endphp
+                                    // Move the user country to the top if it exists in the list
+                                    $filteredCountries = array_diff($countries, [$userCountry]);
+                                    array_unshift($filteredCountries, $userCountry);
+                                @endphp -->
 
                     <form id="newAddressForm" action="{{ route('save.address') }}" method="POST">
                         @csrf
@@ -85,11 +85,7 @@
                         <div class="col-md-12 mb-2">
                             <label>Country/Region</label>
                             <select class="form-select" name="country">
-                                @foreach ($filteredCountries as $country)
-                                    <option value="{{ $country }}" {{ $country == $userCountry ? 'selected' : '' }}>
-                                        {{ $country }}
-                                    </option>
-                                @endforeach
+                                <option value="India" selected>India</option>
                             </select>
                         </div>
 
@@ -182,19 +178,20 @@
                     @endforeach
 
                     <!-- Discount Code -->
-                    <div class="coupon-container d-flex align-items-center justify-content-between mt-3 p-2 border rounded">
+                    <!-- <div class="coupon-container d-flex align-items-center justify-content-between mt-3 p-2 border rounded">
                         <div class="d-flex align-items-center gap-2">
-                            <i class="fas fa-tag"></i> <!-- Coupon Icon -->
-                            <span class="fw-bold">Apply Coupons</span>
-                        </div>
+                            <i class="fas fa-tag"></i> -->
+                             <!-- Coupon Icon -->
+                            <!-- <span class="fw-bold">Apply Coupons</span> -->
+                        <!-- </div> -->
                         <!-- Button to trigger the modal -->
-                        <button class="btn btn-outline-danger px-3" data-bs-toggle="modal" data-bs-target="#couponModal">
+                        <!-- <button class="btn btn-outline-danger px-3" data-bs-toggle="modal" data-bs-target="#couponModal">
                             Coupons
                         </button>
-                    </div>
+                    </div> -->
                     <!-- Apply Coupon Modal -->
 
-                    <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel"
+                    <!-- <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -214,11 +211,13 @@
                                     <h6 class="mt-3">Available Coupons:</h6>
                                     @foreach ($availableCoupons as $coupon)
                                         <div class="coupon-item p-3 border rounded d-flex justify-content-between align-items-center 
-                                                                                                                        {{ $bestCoupon && $bestCoupon->id != $coupon->id ? 'disabled-coupon' : '' }}"
-                                            oncontextmenu="return false;"> <!-- Prevent Right-Click -->
+                                                                                                                                                {{ $bestCoupon && $bestCoupon->id != $coupon->id ? 'disabled-coupon' : '' }}"
+                                            oncontextmenu="return false;">  -->
+                                            <!-- Prevent Right-Click -->
 
-                                            <div class="no-select"> <!-- Prevent Text Selection -->
-                                                <span class="badge bg-danger">{{ $coupon->code }}</span>
+                                            <!-- <div class="no-select"> -->
+                                                 <!-- Prevent Text Selection -->
+                                                <!-- <span class="badge bg-danger">{{ $coupon->code }}</span>
                                                 <br>
                                                 @if ($coupon->type === 'fixed')
                                                     <strong>Save {{ convertPrice($coupon->value) }}</strong>
@@ -244,7 +243,7 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
 
                     <div class="mt-3">
@@ -286,7 +285,7 @@
                             </span>
                             <div class="ms-3">
                                 <strong class="text-dark">FAST SHIPPING</strong>
-                                <p class="text-muted mb-0">Fast shipping across 30 countries</p>
+                                <p class="text-muted mb-0">Fast shipping across India</p>
                             </div>
                         </div>
 
@@ -297,7 +296,7 @@
                             </span>
                             <div class="ms-3">
                                 <strong class="text-dark">SAFE CHECKOUT</strong>
-                                <p class="text-muted mb-0">Our customer happiness team is available 24/7</p>
+                                <p class="text-muted mb-0">Our customer team is available 24/7</p>
                             </div>
                         </div>
 
@@ -312,7 +311,7 @@
                             </div>
                         </div>
 
-                        <div class="d-flex align-items-center">
+                        <!-- <div class="d-flex align-items-center">
                             <span class="d-flex justify-content-center align-items-center"
                                 style="width: 50px; height: 50px; border-radius: 25px; background-color: #e0e0e0; color: #ffc107;">
                                 <i class="fas fa-globe fa-lg"></i>
@@ -321,7 +320,7 @@
                                 <strong class="text-dark">NO CUSTOM DUTIES</strong>
                                 <p class="text-muted mb-0">Enjoy no custom duties across any country</p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
 

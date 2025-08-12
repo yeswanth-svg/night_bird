@@ -7,7 +7,7 @@
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h3 class="fw-bold mb-3">Dish Quantity</h3>
+            <h3 class="fw-bold mb-3">Dress Quantity</h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                     <a href="#">
@@ -18,7 +18,7 @@
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Dish Quantity</a>
+                    <a href="#">Dress Quantity</a>
                 </li>
                 <li class="separator">
                     <i class="icon-arrow-right"></i>
@@ -51,8 +51,8 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Dish Name</th>
-                                        <th>Weight</th>
+                                        <th>Dress Name</th>
+                                        <th>Size</th>
                                         <th>Original Price</th>
                                         <th>Discount Price</th>
 

@@ -288,7 +288,7 @@
                 <div class="col-lg-5">
                     <div class="video position-relative">
                         <img src="img/nightbird-video-thumbnail.png" class="img-fluid rounded shadow"
-                            alt="NightBird Video Preview" style="width: 540px;" />
+                            alt="NightBird Video Preview" style="width: 540px;height: 400px;" />
                         <button type="button" class="btn btn-play position-absolute top-50 start-50 translate-middle"
                             data-bs-toggle="modal" data-src="img/nightbird-video.mp4" data-bs-target="#videoModal"
                             aria-label="Open Video Modal"
