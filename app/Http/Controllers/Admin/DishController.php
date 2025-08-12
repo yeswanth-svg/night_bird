@@ -124,7 +124,7 @@ class DishController extends Controller
             'main_image' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Main image
             'extra_images.*' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Multiple images
             'availability_status' => ['required', 'string'],
-            'dish_tags' => ['required', 'string'],
+            // 'dish_tags' => ['required', 'string'],
             'rating' => ['nullable', 'numeric', 'between:0,5'],
         ]);
 
