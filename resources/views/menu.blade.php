@@ -112,7 +112,7 @@
       </div>
     @empty
       <div class="col-12">
-      <p class="text-muted">Select a category to view dishes.</p>
+      <p class="text-muted">Select a category to view dresses.</p>
       </div>
     @endforelse
       </div>
