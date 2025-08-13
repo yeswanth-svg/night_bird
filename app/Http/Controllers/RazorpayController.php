@@ -22,6 +22,8 @@ class RazorpayController extends Controller
         // Convert amount to paisa (Razorpay uses smallest currency unit)
         $amount = intval(round($request->amount * 100));
 
+        // Force currency to INR
+        $currency = 'INR';
         $currency = $request->currency;
 
         $order = $api->order->create([
