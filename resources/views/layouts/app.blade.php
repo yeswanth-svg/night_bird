@@ -232,11 +232,11 @@
                     @endphp
 
                     <div class="dropdown me-4">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="currencyDropdown"
+                        <!-- <button class="btn btn-light dropdown-toggle" type="button" id="currencyDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{{ $selectedFlag }}" width="25" class="me-1" alt="flag">
                             <span>{{ $sessionCurrency }}</span>
-                        </button>
+                        </button> -->
                         <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
                             <li><a class="dropdown-item" href="#">🇮🇳 {{ $sessionCurrency }}</a></li>
                         </ul>
@@ -891,14 +891,14 @@
                             }
 
                             let messageItem = `
-                                                                                                                                                            <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
-                                                                                                                                                                <div class="notif-content">
-                                                                                                                                                                    <span class="fw-bold">${notification.data.username}</span>
-                                                                                                                                                                    <span class="d-block small text-muted">${notification.data.message}</span>
-                                                                                                                                                                    <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
-                                                                                                                                                                </div>
-                                                                                                                                                            </a>
-                                                                                                                                                        `;
+                                                                                                                                                                <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
+                                                                                                                                                                    <div class="notif-content">
+                                                                                                                                                                        <span class="fw-bold">${notification.data.username}</span>
+                                                                                                                                                                        <span class="d-block small text-muted">${notification.data.message}</span>
+                                                                                                                                                                        <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
+                                                                                                                                                                    </div>
+                                                                                                                                                                </a>
+                                                                                                                                                            `;
 
                             messageList.innerHTML += messageItem;
                             messageListMobile.innerHTML += messageItem;
