@@ -30,7 +30,7 @@ class ReviewController extends Controller
             'dish_id' => $request->dish_id,
             'user_id' => auth()->id(),
             'title' => $request->title,
-            'content' => $request->content,
+            // 'content' => $request->content,
             'rating' => $request->rating,
         ]);
 
