@@ -36,7 +36,6 @@
                     </div>
                 @endif
 
-
                 <!-- Contact Info -->
                 <div class="border p-3">
                     <h5>Contact</h5>
@@ -46,41 +45,25 @@
                 <!-- Shipping Address -->
                 <div class="border p-3 mt-3">
                     <h5>Shipping Address</h5>
+
+                    <!-- Saved Addresses -->
                     <div class="mb-3">
                         <label>Saved Addresses</label>
                         <select class="form-select" id="savedAddress">
                             <option value="new">Use a new address</option>
                             @foreach($addresses as $address)
-                                <option value="{{ $address->id }}">{{ $address->address }}, {{ $address->city }}</option>
+                                <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
+                                    {{ $address->address }}, {{ $address->city }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- @php
-                                    $userCountry = auth()->user()->country;
-
-                                    // Mapping currency codes to country names
-                                    $countryMap = [
-                                        'USD' => 'USA',
-                                        'CAD' => 'Canada',
-                                        'AUD' => 'Australia'
-                                    ];
-
-                                    // Convert user country if it's a currency code
-                                    $userCountry = $countryMap[$userCountry] ?? $userCountry;
-
-                                    // Define available countries
-                                    $countries = ['USA', 'Canada', 'Australia'];
-
-                                    // Move the user country to the top if it exists in the list
-                                    $filteredCountries = array_diff($countries, [$userCountry]);
-                                    array_unshift($filteredCountries, $userCountry);
-                                @endphp -->
-
+                    <!-- Address Form -->
                     <form id="newAddressForm" action="{{ route('save.address') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="selected_address" id="selectedAddressInput">
-
+                        <input type="hidden" name="selected_address" id="selectedAddressInput"
+                            value="{{ $addresses->firstWhere('is_default', 1)->id ?? '' }}">
 
                         <div class="col-md-12 mb-2">
                             <label>Country/Region</label>
@@ -92,58 +75,58 @@
                         <div class="row">
                             <div class="col-md-6 mb-2">
                                 <label>First Name</label>
-                                <input type="text" class="form-control" name="first_name" required>
+                                <input type="text" class="form-control" name="first_name" required
+                                    value="{{ $addresses->firstWhere('is_default', 1)->first_name ?? '' }}">
                             </div>
                             <div class="col-md-6 mb-2">
                                 <label>Last Name</label>
-                                <input type="text" class="form-control" name="last_name" required>
+                                <input type="text" class="form-control" name="last_name" required
+                                    value="{{ $addresses->firstWhere('is_default', 1)->last_name ?? '' }}">
                             </div>
-                        </div>
-
-                        <div class="mb-2">
-                            <label>Company (Optional)</label>
-                            <input type="text" class="form-control" name="company">
                         </div>
 
                         <div class="mb-2">
                             <label>Address</label>
-                            <input type="text" class="form-control" name="address" required>
+                            <input type="text" class="form-control" name="address" required
+                                value="{{ $addresses->firstWhere('is_default', 1)->address ?? '' }}">
                         </div>
 
                         <div class="mb-2">
                             <label>Apartment, Suite, etc. (Optional)</label>
-                            <input type="text" class="form-control" name="apartment">
+                            <input type="text" class="form-control" name="apartment"
+                                value="{{ $addresses->firstWhere('is_default', 1)->apartment ?? '' }}">
                         </div>
 
                         <div class="row">
                             <div class="col-md-4 mb-2">
                                 <label>City</label>
-                                <input type="text" class="form-control" name="city" required>
+                                <input type="text" class="form-control" name="city" required
+                                    value="{{ $addresses->firstWhere('is_default', 1)->city ?? '' }}">
                             </div>
                             <div class="col-md-4 mb-2">
                                 <label>State</label>
-                                <input type="text" class="form-control" name="state" required>
+                                <input type="text" class="form-control" name="state" required
+                                    value="{{ $addresses->firstWhere('is_default', 1)->state ?? '' }}">
                             </div>
                             <div class="col-md-4 mb-2">
                                 <label>ZIP Code</label>
-                                <input type="text" class="form-control" name="zip_code" required>
+                                <input type="text" class="form-control" name="zip_code" required
+                                    value="{{ $addresses->firstWhere('is_default', 1)->zip_code ?? '' }}">
                             </div>
                         </div>
 
                         <div class="mb-2">
                             <label>Phone</label>
-                            <input type="text" class="form-control" name="phone" required>
+                            <input type="text" class="form-control" name="phone" required
+                                value="{{ $addresses->firstWhere('is_default', 1)->phone ?? '' }}">
                         </div>
-
 
                         <div class="d-flex justify-content-between">
                             <a href="{{ url('/cart') }}" class="btn btn-link">Return to cart</a>
                             <button class="btn btn-primary" type="submit">Continue to Shipping</button>
                         </div>
                     </form>
-
                 </div>
-
             </div>
 
             <!-- Right Panel: Order Summary -->
@@ -179,71 +162,71 @@
 
                     <!-- Discount Code -->
                     <!-- <div class="coupon-container d-flex align-items-center justify-content-between mt-3 p-2 border rounded">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="fas fa-tag"></i> -->
-                             <!-- Coupon Icon -->
-                            <!-- <span class="fw-bold">Apply Coupons</span> -->
-                        <!-- </div> -->
-                        <!-- Button to trigger the modal -->
-                        <!-- <button class="btn btn-outline-danger px-3" data-bs-toggle="modal" data-bs-target="#couponModal">
-                            Coupons
-                        </button>
-                    </div> -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-tag"></i> -->
+                    <!-- Coupon Icon -->
+                    <!-- <span class="fw-bold">Apply Coupons</span> -->
+                    <!-- </div> -->
+                    <!-- Button to trigger the modal -->
+                    <!-- <button class="btn btn-outline-danger px-3" data-bs-toggle="modal" data-bs-target="#couponModal">
+                                    Coupons
+                                </button>
+                            </div> -->
                     <!-- Apply Coupon Modal -->
 
                     <!-- <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="couponModalLabel">Apply Coupon</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="couponModalLabel">Apply Coupon</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
 
-                                <div class="modal-body">
-                                    <div class="input-group mb-3">
-                                        <input type="text" id="coupon_code" class="form-control"
-                                            placeholder="Enter coupon code">
-                                        <button class="btn btn-primary" onclick="applyCoupon()">Apply</button>
-                                    </div>
-
-                                    <h6 class="mt-3">Available Coupons:</h6>
-                                    @foreach ($availableCoupons as $coupon)
-                                        <div class="coupon-item p-3 border rounded d-flex justify-content-between align-items-center 
-                                                                                                                                                {{ $bestCoupon && $bestCoupon->id != $coupon->id ? 'disabled-coupon' : '' }}"
-                                            oncontextmenu="return false;">  -->
-                                            <!-- Prevent Right-Click -->
-
-                                            <!-- <div class="no-select"> -->
-                                                 <!-- Prevent Text Selection -->
-                                                <!-- <span class="badge bg-danger">{{ $coupon->code }}</span>
-                                                <br>
-                                                @if ($coupon->type === 'fixed')
-                                                    <strong>Save {{ convertPrice($coupon->value) }}</strong>
-                                                @elseif ($coupon->type === 'percentage')
-                                                    <strong>Save {{ $coupon->value }}% off</strong>
-                                                @endif
-                                                <br>
-                                                <small>Expires on:
-                                                    {{ \Carbon\Carbon::parse($coupon->expiry_date)->format('d M Y | h:i A') }}</small>
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <input type="text" id="coupon_code" class="form-control"
+                                                    placeholder="Enter coupon code">
+                                                <button class="btn btn-primary" onclick="applyCoupon()">Apply</button>
                                             </div>
 
-                                            @if ($bestCoupon && $bestCoupon->id == $coupon->id)
-                                                <button class="btn btn-outline-primary btn-sm"
-                                                    onclick="copyCoupon('{{ $coupon->code }}')">
-                                                    Copy
-                                                </button>
-                                            @else
-                                                <button class="btn btn-secondary btn-sm" disabled>Disabled</button>
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
+                                            <h6 class="mt-3">Available Coupons:</h6>
+                                            @foreach ($availableCoupons as $coupon)
+                                                <div class="coupon-item p-3 border rounded d-flex justify-content-between align-items-center 
+                                                                                                                                                        {{ $bestCoupon && $bestCoupon->id != $coupon->id ? 'disabled-coupon' : '' }}"
+                                                    oncontextmenu="return false;">  -->
+                    <!-- Prevent Right-Click -->
 
-                            </div>
-                        </div>
-                    </div> -->
+                    <!-- <div class="no-select"> -->
+                    <!-- Prevent Text Selection -->
+                    <!-- <span class="badge bg-danger">{{ $coupon->code }}</span>
+                                                        <br>
+                                                        @if ($coupon->type === 'fixed')
+                                                            <strong>Save {{ convertPrice($coupon->value) }}</strong>
+                                                        @elseif ($coupon->type === 'percentage')
+                                                            <strong>Save {{ $coupon->value }}% off</strong>
+                                                        @endif
+                                                        <br>
+                                                        <small>Expires on:
+                                                            {{ \Carbon\Carbon::parse($coupon->expiry_date)->format('d M Y | h:i A') }}</small>
+                                                    </div>
+
+                                                    @if ($bestCoupon && $bestCoupon->id == $coupon->id)
+                                                        <button class="btn btn-outline-primary btn-sm"
+                                                            onclick="copyCoupon('{{ $coupon->code }}')">
+                                                            Copy
+                                                        </button>
+                                                    @else
+                                                        <button class="btn btn-secondary btn-sm" disabled>Disabled</button>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> -->
 
 
                     <div class="mt-3">
@@ -312,19 +295,16 @@
                         </div>
 
                         <!-- <div class="d-flex align-items-center">
-                            <span class="d-flex justify-content-center align-items-center"
-                                style="width: 50px; height: 50px; border-radius: 25px; background-color: #e0e0e0; color: #ffc107;">
-                                <i class="fas fa-globe fa-lg"></i>
-                            </span>
-                            <div class="ms-3">
-                                <strong class="text-dark">NO CUSTOM DUTIES</strong>
-                                <p class="text-muted mb-0">Enjoy no custom duties across any country</p>
-                            </div>
-                        </div> -->
+                                    <span class="d-flex justify-content-center align-items-center"
+                                        style="width: 50px; height: 50px; border-radius: 25px; background-color: #e0e0e0; color: #ffc107;">
+                                        <i class="fas fa-globe fa-lg"></i>
+                                    </span>
+                                    <div class="ms-3">
+                                        <strong class="text-dark">NO CUSTOM DUTIES</strong>
+                                        <p class="text-muted mb-0">Enjoy no custom duties across any country</p>
+                                    </div>
+                                </div> -->
                     </div>
-
-
-
                 </div>
             </div>
         </div>
@@ -338,45 +318,50 @@
 
             // Function to fill the address form
             function fillAddressForm(data) {
-                document.querySelector('[name="country"]').value = data.country;
-                document.querySelector('[name="first_name"]').value = data.first_name;
-                document.querySelector('[name="last_name"]').value = data.last_name;
-                document.querySelector('[name="company"]').value = data.company || '';
-                document.querySelector('[name="address"]').value = data.address;
+                document.querySelector('[name="country"]').value = data.country || 'India';
+                document.querySelector('[name="first_name"]').value = data.first_name || '';
+                document.querySelector('[name="last_name"]').value = data.last_name || '';
+                // Skip company if form doesn't have it
+                if (document.querySelector('[name="company"]')) {
+                    document.querySelector('[name="company"]').value = data.company || '';
+                }
+                document.querySelector('[name="address"]').value = data.address || '';
                 document.querySelector('[name="apartment"]').value = data.apartment || '';
-                document.querySelector('[name="city"]').value = data.city;
-                document.querySelector('[name="state"]').value = data.state;
-                document.querySelector('[name="zip_code"]').value = data.zip_code;
-                document.querySelector('[name="phone"]').value = data.phone;
+                document.querySelector('[name="city"]').value = data.city || '';
+                document.querySelector('[name="state"]').value = data.state || '';
+                document.querySelector('[name="zip_code"]').value = data.zip_code || '';
+                document.querySelector('[name="phone"]').value = data.phone || '';
 
                 selectedAddressInput.value = data.id;
-                newAddressForm.style.display = 'block';
+                // Form is already visible, so no need to toggle display
             }
 
             // Function to clear the address form
             function clearAddressForm() {
-                document.querySelector('[name="country"]').value = "";
-                document.querySelector('[name="first_name"]').value = "";
-                document.querySelector('[name="last_name"]').value = "";
-                document.querySelector('[name="company"]').value = "";
-                document.querySelector('[name="address"]').value = "";
-                document.querySelector('[name="apartment"]').value = "";
-                document.querySelector('[name="city"]').value = "";
-                document.querySelector('[name="state"]').value = "";
-                document.querySelector('[name="zip_code"]').value = "";
-                document.querySelector('[name="phone"]').value = "";
+                document.querySelector('[name="country"]').value = 'India';
+                document.querySelector('[name="first_name"]').value = '';
+                document.querySelector('[name="last_name"]').value = '';
+                if (document.querySelector('[name="company"]')) {
+                    document.querySelector('[name="company"]').value = '';
+                }
+                document.querySelector('[name="address"]').value = '';
+                document.querySelector('[name="apartment"]').value = '';
+                document.querySelector('[name="city"]').value = '';
+                document.querySelector('[name="state"]').value = '';
+                document.querySelector('[name="zip_code"]').value = '';
+                document.querySelector('[name="phone"]').value = '';
 
-                selectedAddressInput.value = "";
+                selectedAddressInput.value = '';
             }
 
-            // Auto-fill the form with the first saved address if available
-            let firstAddressId = savedAddressSelect.options[1]?.value; // First saved address (if exists)
-            if (firstAddressId) {
-                fetch(`/get-address/${firstAddressId}`)
-                    .then(response => response.json())
+            // Auto-fill the form with the first saved address if exists
+            let firstSavedOption = savedAddressSelect.querySelector('option[value]:not([value="new"])');
+            if (firstSavedOption) {
+                fetch(`/get-address/${firstSavedOption.value}`)
+                    .then(res => res.json())
                     .then(data => {
                         fillAddressForm(data);
-                        savedAddressSelect.value = firstAddressId;
+                        savedAddressSelect.value = firstSavedOption.value;
                     });
             }
 
@@ -388,12 +373,13 @@
                     clearAddressForm();
                 } else {
                     fetch(`/get-address/${addressId}`)
-                        .then(response => response.json())
+                        .then(res => res.json())
                         .then(fillAddressForm);
                 }
             });
         });
     </script>
+
 
 
     <script>

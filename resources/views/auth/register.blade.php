@@ -3,15 +3,15 @@
 @section('title', 'Registration')
 @section('content')
 
- <style>
-    .breadcrumb-item a {
-    color: #fff;
-    }
-  </style>
+    <style>
+        .breadcrumb-item a {
+            color: #fff;
+        }
+    </style>
     <!-- Hero Start -->
     <div class="container-fluid py-6 my-6 mt-0" style="
-                            background: url('img/bg-cover1.png');
-                            color: white;height: 340px;">
+                                background: url('img/bg-cover1.png');
+                                color: white;height: 340px;">
         <div class="container text-center animated bounceInDown">
             <h1 class="display-1 mb-4" style="color: white">Register</h1>
             <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">
@@ -26,8 +26,8 @@
 
     <section class="py-4 d-flex justify-content-center">
         <div class="card shadow-sm p-4 col-lg-5" style="
-                        max-width: 100%;
-                    ">
+                            max-width: 100%;
+                        ">
             <header class="text-center">
                 <h2 class="h4 text-primary">Register</h2>
                 <p class="text-muted">Create a new account to access all features.</p>
@@ -60,14 +60,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="country" class="form-label text-dark fw-bold">Country</label>
-                    <select type="text" class="form-select" id="country" name="country" required autocomplete="Country">
-                        <option value="" selected>Select Country</option>
-                        <option value="USD">USA</option>
-                        <option value="CAD">Canada</option>
-                        <option value="AUD">Australia</option>
+                    <select class="form-select" id="country" name="country" required autocomplete="Country">
+                        <option value="IN" selected>India</option>
                     </select>
                     <div class="invalid-feedback">Please select your country.</div>
                 </div>
+
 
 
                 <div class="mb-3">

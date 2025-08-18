@@ -1,83 +1,71 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
-use App\Models\CouponUsage;
 use App\Models\Reward;
 use App\Models\Setting;
 use App\Models\UserAddress;
+use App\Models\Order;
 use Illuminate\Http\Request;
-use App\Models\Order; // Ensure you have this model
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
-    // Show Checkout Page
+    /**
+     * Show Checkout Page
+     */
     public function index()
     {
         $user = Auth::user();
 
-        // Fetch cart items for the logged-in user
+        // Fetch cart items
         $cartItems = Order::with('dish', 'quantity')
             ->where('user_id', $user->id)
             ->where('order_stage', 'in_cart')
             ->get();
 
-        // Calculate subtotal (Original Prices Sum)
+        // Totals
         $subtotal = $cartItems->sum(fn($item) => ($item->quantity->original_price ?? 0) * $item->cart_quantity);
-
         $discountedTotal = $cartItems->sum(fn($item) => ($item->quantity->discount_price ?? 0) * $item->cart_quantity);
+        $savings = $cartItems->sum(fn($item) => (($item->quantity->original_price ?? 0) - ($item->quantity->discount_price ?? 0)) * $item->cart_quantity);
 
-        // Calculate savings (Total Discount Amount)
-        $savings = $cartItems->sum(fn($item) => ($item->quantity->original_price - $item->quantity->discount_price) * $item->cart_quantity);
-
-        // Retrieve applied coupon discount from the `orders` table
+        // Coupon
         $appliedCoupon = $cartItems->firstWhere('applied_coupon_id', '!=', null);
         $discountAmount = $cartItems->sum(fn($item) => $item->coupon_discount ?? 0);
 
+        // Grand total after discount
+        $grandTotal = max(0, $discountedTotal - $discountAmount);
 
-        // Calculate grand total (subtract discount)
-        $grandTotal = max(0, $cartItems->sum(fn($item) => $item->quantity->discount_price * $item->cart_quantity) - $discountAmount);
-
-
-        // Fetch reward based on cart total
+        // Rewards
         $reward = Reward::where('min_cart_value', '<=', $grandTotal)
-            ->orderBy('min_cart_value', 'desc') // Get the highest applicable reward
+            ->orderBy('min_cart_value', 'desc')
             ->first();
-
         $rewardMessage = $reward?->reward_message;
 
-
-        // **Update the reward message in the orders**
+        // Save reward message in orders
         Order::where('user_id', $user->id)
             ->where('order_stage', 'in_cart')
             ->update(['reward_message' => $rewardMessage]);
 
-
-        // Fetch user addresses
+        // Addresses
         $addresses = UserAddress::where('user_id', $user->id)->get();
 
-
-        // Fetch all active and valid coupons
+        // Coupons
         $usedCoupons = $user->couponUsages()->pluck('coupon_id');
         $availableCoupons = Coupon::where('active', true)
             ->whereDate('expiry_date', '>=', now())
             ->whereNotIn('id', $usedCoupons)
             ->get();
 
-        // Determine the best coupon that gives the highest savings
+        // Find best coupon
         $bestCoupon = null;
         $maxSavings = 0;
-
         foreach ($availableCoupons as $coupon) {
-            $potentialSavings = 0;
-
-            if ($coupon->type === 'fixed') {
-                $potentialSavings = $coupon->value;
-            } elseif ($coupon->type === 'percentage') {
-                $potentialSavings = ($grandTotal * $coupon->value) / 100;
-            }
+            $potentialSavings = $coupon->type === 'fixed'
+                ? $coupon->value
+                : ($grandTotal * $coupon->value) / 100;
 
             if ($potentialSavings > $maxSavings) {
                 $maxSavings = $potentialSavings;
@@ -96,70 +84,57 @@ class CheckoutController extends Controller
             'bestCoupon',
             'discountAmount',
             'appliedCoupon',
-            'rewardMessage' // Send reward message to frontend
+            'rewardMessage'
         ));
     }
 
-
-
-
-
-    // Process Checkout
-
+    /**
+     * Save or Update Shipping Address
+     */
     public function saveAddress(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $orders = Order::where('user_id', $user->id)->where('order_stage', 'in_cart')->get();
 
         if ($orders->isEmpty()) {
             return redirect()->back()->with('error', 'No active orders found.');
         }
 
-        $addressData = [];
-
-        if ($request->has('selected_address') && !empty($request->selected_address) && $request->selected_address !== "new") {
-            // User selected an existing address, update it with new form values
+        if ($request->selected_address && $request->selected_address !== "new") {
             $address = UserAddress::find($request->selected_address);
-
             if ($address) {
-                $address->update([
-                    'country' => $request->country,
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'company' => $request->company ?: null,
-                    'address' => $request->address,
-                    'apartment' => $request->apartment,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'zip_code' => $request->zip_code,
-                    'phone' => $request->phone,
-                ]);
-
-                $addressData = $address->toArray();
+                $address->update($request->only([
+                    'country',
+                    'first_name',
+                    'last_name',
+                    'company',
+                    'address',
+                    'apartment',
+                    'city',
+                    'state',
+                    'zip_code',
+                    'phone'
+                ]));
             }
         } else {
-            // User entered a new address, save it
             $address = UserAddress::create([
-                'user_id' => $user->id,
-                'country' => $request->country,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'company' => $request->company ?: null,
-                'address' => $request->address,
-                'apartment' => $request->apartment,
-                'city' => $request->city,
-                'state' => $request->state,
-                'zip_code' => $request->zip_code,
-                'phone' => $request->phone,
-            ]);
-
-            $addressData = $address->toArray();
+                'user_id' => $user->id
+            ] + $request->only([
+                            'country',
+                            'first_name',
+                            'last_name',
+                            'company',
+                            'address',
+                            'apartment',
+                            'city',
+                            'state',
+                            'zip_code',
+                            'phone'
+                        ]));
         }
 
-        // Convert address data to JSON
-        $addressJson = json_encode($addressData, JSON_PRETTY_PRINT);
+        $addressJson = json_encode($address->toArray(), JSON_PRETTY_PRINT);
 
-        // Update all `in_cart` orders for the user with the new address JSON
         foreach ($orders as $order) {
             $order->update([
                 'selected_address' => $addressJson,
@@ -170,13 +145,14 @@ class CheckoutController extends Controller
         return redirect()->route('shipping.page')->with('success', 'Shipping address updated successfully.');
     }
 
-
-
+    /**
+     * Apply Coupon
+     */
     public function applyCoupon(Request $request)
     {
         $request->validate(['promo_code' => 'required|string']);
 
-        $user = auth()->user();
+        $user = Auth::user();
         $coupon = Coupon::where('code', $request->promo_code)
             ->where('active', true)
             ->whereDate('expiry_date', '>=', now())
@@ -186,9 +162,7 @@ class CheckoutController extends Controller
             return response()->json(['success' => false, 'message' => 'Invalid or expired coupon.']);
         }
 
-        // Check if the user already used this coupon
-        $alreadyUsed = $user->couponUsages()->where('coupon_id', $coupon->id)->exists();
-        if ($alreadyUsed) {
+        if ($user->couponUsages()->where('coupon_id', $coupon->id)->exists()) {
             return response()->json(['success' => false, 'message' => 'You have already used this coupon.']);
         }
 
@@ -197,23 +171,18 @@ class CheckoutController extends Controller
             return response()->json(['success' => false, 'message' => 'Your cart is empty.']);
         }
 
-        // Calculate cart total
         $cartTotal = $cartItems->sum('total_amount');
 
-        // Check minimum order value
         if ($coupon->minimum_order_value && $cartTotal < $coupon->minimum_order_value) {
             return response()->json(['success' => false, 'message' => 'Cart total is less than the minimum required.']);
         }
 
-        // Calculate Discount (Percentage or Fixed)
         $discount = $coupon->type === 'percentage'
             ? ($cartTotal * ($coupon->value / 100))
             : $coupon->value;
 
-        // Ensure the total doesn't go negative
         $newTotal = max(0, $cartTotal - $discount);
 
-        // Apply discount to each cart item
         foreach ($cartItems as $item) {
             $item->update([
                 'applied_coupon_id' => $coupon->id,
@@ -221,154 +190,118 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // Save coupon usage
         $user->couponUsages()->create(['coupon_id' => $coupon->id]);
 
-        // Return JSON Response
         return response()->json([
             'success' => true,
             'message' => 'Coupon Applied Successfully!',
-            'discount' => convertPrice($discount), // Formatted price
-            'discount_raw' => $discount, // Numeric price
+            'discount' => convertPrice($discount),
+            'discount_raw' => $discount,
             'new_total' => convertPrice($newTotal),
             'new_total_raw' => $newTotal
         ]);
-
     }
 
+    /**
+     * Shipping Page
+     */
     public function shipping()
     {
         $user = Auth::user();
 
-        // Fetch cart items for the logged-in user
         $cartItems = Order::with('dish', 'quantity')
             ->where('user_id', $user->id)
             ->where('order_stage', 'in_cart')
             ->get();
 
-        // Calculate Subtotal, Discounts, and Grand Total
-        $subtotal = (float) $cartItems->sum(fn($item) => (float) $item->quantity->original_price * $item->cart_quantity);
-        $discountedtotal = $cartItems->sum(fn($item) => $item->quantity->discount_price * $item->cart_quantity);
-        $savings = (float) $cartItems->sum(fn($item) => (float) ($item->quantity->original_price - $item->quantity->discount_price) * $item->cart_quantity);
+        $subtotal = $cartItems->sum(fn($item) => $item->quantity->original_price * $item->cart_quantity);
+        $discountedTotal = $cartItems->sum(fn($item) => $item->quantity->discount_price * $item->cart_quantity);
+        $savings = $subtotal - $discountedTotal;
         $appliedCoupon = $cartItems->firstWhere('applied_coupon_id', '!=', null);
-        $discountAmount = (float) $cartItems->sum(fn($item) => $item->coupon_discount ?? 0);
-        $grandTotal = max(0, (float) ($discountedtotal - $discountAmount));
+        $discountAmount = $cartItems->sum(fn($item) => $item->coupon_discount ?? 0);
+        $grandTotal = max(0, $discountedTotal - $discountAmount);
 
-        // Fetch user shipping address
         $userAddress = UserAddress::where('user_id', $user->id)->first();
-        $country = $userAddress ? $userAddress->country : null;
+        $country = $userAddress->country ?? 'India';
 
-        // Determine Total Weight
-        $totalWeight = $cartItems->sum(function ($item) {
-            $weight = strtolower(trim($item->quantity->weight));
-
-            if (str_ends_with($weight, 'kg')) {
-                $weight = (float) str_replace('kg', '', $weight); // Convert kg to float
-            } elseif (str_ends_with($weight, 'g')) {
-                $weight = (float) str_replace('g', '', $weight) / 1000; // Convert g to kg
-            } else {
-                $weight = (float) $weight; // Fallback if already numeric
-            }
-
-            return $weight * $item->cart_quantity;
-        });
-
-        // Fetch the best matching weight bracket
-        $shippingZone = DB::table('shipping_zones')
-            ->where('country', $country)
-            ->where('min_weight', '<=', $totalWeight)
-            ->orderBy('min_weight', 'desc')
-            ->first();
-
-        if ($shippingZone) {
-            \Log::info("Shipping Zone Found: Min Weight = {$shippingZone->min_weight}, Max Weight = " . ($shippingZone->max_weight ?? 'NULL'));
-            \Log::info("Base Priority Rate: {$shippingZone->priority_rate}, Base Standard Rate: {$shippingZone->standard_rate}");
-
-            // Base rate for the bracket
-            $priorityShipping = (float) $shippingZone->priority_rate;
-            $standardShipping = (float) $shippingZone->standard_rate;
-
-            // Define weight boundaries
-            $baseWeight = $shippingZone->min_weight;
-            $maxWeight = $shippingZone->max_weight ?? $totalWeight; // If max_weight is NULL, assume no limit
-
-            // Calculate extra weight within the same bracket
-            $extraWeight = max(0, $totalWeight - $baseWeight);
-            \Log::info("Excess Weight = {$extraWeight} KG");
-
-            // Correct per kg charge for gradual pricing
-            if ($maxWeight > $baseWeight) {
-                $perKgChargePriority = ($shippingZone->priority_rate / ($maxWeight - $baseWeight));
-                $perKgChargeStandard = ($shippingZone->standard_rate / ($maxWeight - $baseWeight));
-            } else {
-                // If no max weight is defined, use flat per kg rate
-                $perKgChargePriority = $shippingZone->priority_rate / $baseWeight;
-                $perKgChargeStandard = $shippingZone->standard_rate / $baseWeight;
-            }
-
-            // Apply proportional pricing inside the bracket
-            $priorityShipping += ($extraWeight * $perKgChargePriority);
-            $standardShipping += ($extraWeight * $perKgChargeStandard);
-
-            \Log::info("Final Priority Rate: " . number_format($priorityShipping, 2));
-            \Log::info("Final Standard Rate: " . number_format($standardShipping, 2));
-
-            \Log::info("====================================================");
-            \Log::info("FINAL SHIPPING COSTS");
-            \Log::info("Total Weight: " . $totalWeight);
-            \Log::info("Final Priority Rate: " . number_format($priorityShipping, 2));
-            \Log::info("Final Standard Rate: " . number_format($standardShipping, 2));
-            \Log::info("====================================================");
+        /**
+         * Price-based shipping logic
+         * You can change these later as per your needs
+         */
+        if ($grandTotal <= 1000) {
+            $shippingCost = 90;
+        } elseif ($grandTotal <= 2000) {
+            $shippingCost = 120;
+        } elseif ($grandTotal <= 5000) {
+            $shippingCost = 150;
+        } elseif ($grandTotal <= 10000) {
+            $shippingCost = 200;
+        } else {
+            $shippingCost = 0; // free shipping above ₹10000
         }
 
-        // Determine selected shipping method (default to priority shipping)
-        $selectedShipping = $cartItems->first()->type_of_shipping ?? 'priority_shipping';
-        $shippingCost = ($selectedShipping === 'priority_shipping') ? $priorityShipping : $standardShipping;
-
-        // Distribute shipping cost only if it's priority or standard shipping
+        // Assign shipping cost equally per item
         $cartItemCount = $cartItems->count();
         $shippingPerItem = $cartItemCount > 0 ? ($shippingCost / $cartItemCount) : 0;
 
-        // Update shipping_cost for each cart item based on selected shipping method
         foreach ($cartItems as $item) {
-            if ($item->type_of_shipping === 'priority_shipping' || $item->type_of_shipping === 'standard_shipping') {
-                $item->shipping_cost = $shippingPerItem;
-                $item->save();
-            }
+            $item->shipping_cost = $shippingPerItem;
+            $item->save();
         }
+
+        // Add shipping to grand total
+        $grandTotalWithShipping = $grandTotal + $shippingCost;
 
         return view('user.shipping', compact(
             'cartItems',
             'subtotal',
-            'discountedtotal',
+            'discountedTotal',
             'savings',
             'grandTotal',
+            'grandTotalWithShipping',
             'userAddress',
-            'priorityShipping',
-            'standardShipping',
-            'discountAmount'
+            'discountAmount',
+            'shippingCost'
         ));
     }
 
-
-
-
-
+    /**
+     * Update Shipping Method
+     */
     public function updateShippingMethod(Request $request)
     {
         $user = Auth::user();
         $shippingMethod = $request->shipping_method;
-        $shippingCost = (float) $request->shipping_cost; // Receive shipping cost
 
-        // Fetch cart items
-        $cartItems = Order::where('user_id', $user->id)
+        // Get cart items
+        $cartItems = Order::with('quantity')
+            ->where('user_id', $user->id)
             ->where('order_stage', 'in_cart')
             ->get();
 
+        // Calculate grand total (discount applied)
+        $discountedTotal = $cartItems->sum(fn($item) => $item->quantity->discount_price * $item->cart_quantity);
+        $discountAmount = $cartItems->sum(fn($item) => $item->coupon_discount ?? 0);
+        $grandTotal = max(0, $discountedTotal - $discountAmount);
+
+        // Price-based shipping cost logic
+        if ($grandTotal <= 1000) {
+            $shippingCost = 90;
+        } elseif ($grandTotal <= 2000) {
+            $shippingCost = 120;
+        } elseif ($grandTotal <= 5000) {
+            $shippingCost = 150;
+        } elseif ($grandTotal <= 10000) {
+            $shippingCost = 200;
+        } else {
+            $shippingCost = 0; // Free shipping above ₹10000
+        }
+
+        // Distribute shipping per item
         $cartItemCount = $cartItems->count();
         $shippingPerItem = $cartItemCount > 0 ? ($shippingCost / $cartItemCount) : 0;
 
-        // Update all "in_cart" orders with new shipping method and distributed shipping cost
+        // Save shipping method & cost
         foreach ($cartItems as $item) {
             $item->type_of_shipping = $shippingMethod;
             $item->shipping_cost = $shippingPerItem;
@@ -377,14 +310,10 @@ class CheckoutController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Shipping method updated successfully!'
+            'message' => 'Shipping method updated successfully!',
+            'shipping_cost' => $shippingCost,
+            'grand_total_with_shipping' => $grandTotal + $shippingCost
         ]);
     }
-
-
-
-
-
-
 
 }
